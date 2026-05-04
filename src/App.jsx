@@ -29,165 +29,6 @@ const BOTTOM_NAV = [
   { id:"more",      label:"More",      icon:"⋯" },
 ];
 
-const PRACTITIONERS = [
-  { id:1, name:"Dr. Amara Osei", specialty:"Performance Psychology", avatar:"AO", color:C.sage,
-    videos:[
-      { id:"v1", title:"Releasing Outcome Attachment", duration:"12 min", tag:"Mindset" },
-      { id:"v2", title:"The Actor's Nervous System",   duration:"18 min", tag:"Science" },
-      { id:"v3", title:"Fear as Fuel",                 duration:"9 min",  tag:"Audition Prep" },
-    ]},
-  { id:2, name:"Lena Marchetti", specialty:"Somatic Movement", avatar:"LM", color:C.rose,
-    videos:[
-      { id:"v4", title:"Body Scan Before the Room",       duration:"8 min",  tag:"Grounding" },
-      { id:"v5", title:"Shaking It Out — Trauma Release", duration:"15 min", tag:"Release" },
-      { id:"v6", title:"Standing in Your Power",          duration:"11 min", tag:"Embodiment" },
-    ]},
-  { id:3, name:"James Okafor", specialty:"Voice & Breath", avatar:"JO", color:C.lavender,
-    videos:[
-      { id:"v7", title:"The Resonant Breath",         duration:"10 min", tag:"Voice" },
-      { id:"v8", title:"Releasing the Throat Hold",   duration:"7 min",  tag:"Release" },
-      { id:"v9", title:"Box Breathing for Creatives", duration:"6 min",  tag:"Breathwork" },
-    ]},
-];
-
-const ALL_VIDEOS = PRACTITIONERS.flatMap(p => p.videos.map(v => ({ ...v, practitioner:p.name, color:p.color })));
-
-const RITUAL_STEPS = [
-  { id:"ground",  label:"Ground",  icon:"⬡", desc:"Connect to your body",         color:C.sage },
-  { id:"breathe", label:"Breathe", icon:"〜", desc:"Regulate your nervous system", color:C.lavender },
-  { id:"affirm",  label:"Affirm",  icon:"✦", desc:"Set your intention",            color:C.gold },
-  { id:"release", label:"Release", icon:"◌", desc:"Let go of outcome",             color:C.rose },
-  { id:"arrive",  label:"Arrive",  icon:"◎", desc:"Step into your character",      color:C.teal },
-];
-
-const AFFIRMATIONS = [
-  "I bring something no one else can.",
-  "This room is lucky to have me in it.",
-  "My preparation has brought me here.",
-  "I am not auditioning for approval — I am sharing my art.",
-  "Nerves are proof that I care. They are my allies.",
-  "I release the need to control the outcome.",
-  "My presence is enough.",
-  "I have done hard things before. I am doing one now.",
-];
-
-const ACTOR_QUOTES = [
-  { id:"q1", text:"An actor is at his best a kind of unfrocked priest who, for an hour or two, can call on heaven and hell to mesmerise a group of innocents.", author:"Alec Guinness" },
-  { id:"q2", text:"Acting is not about being someone different. It's finding the similarity in what is apparently different, then finding myself in there.", author:"Meryl Streep" },
-  { id:"q3", text:"You have to be willing to look stupid. The fear of looking stupid is what makes you look stupid.", author:"Stella Adler" },
-  { id:"q4", text:"Your emotional life is not cut off when you walk into an audition room. It is the very thing they want to see.", author:"Sanford Meisner" },
-  { id:"q5", text:"The craft is in the listening. Be changed by what your scene partner gives you.", author:"Sanford Meisner" },
-  { id:"q6", text:"Don't act. Be. The camera picks up everything — especially the lie.", author:"Michael Caine" },
-  { id:"q7", text:"There is no failure in rehearsal. There is only discovery.", author:"Peter Brook" },
-  { id:"q8", text:"Your vulnerability is your power. The audience comes to be moved, not impressed.", author:"Uta Hagen" },
-  { id:"q9", text:"Acting is the ability to live truthfully under imaginary circumstances.", author:"Sanford Meisner" },
-  { id:"q10", text:"A great actor is someone who can do nothing — and hold the room.", author:"Lee Strasberg" },
-  { id:"q11", text:"The best performances come from actors who are not afraid of silence.", author:"Sidney Lumet" },
-  { id:"q12", text:"The preparation, the work, the discipline — it's what you bring to the room, not what you take away.", author:"Viola Davis" },
-];
-
-const KAZAN_VOW = [
-  "I will take my rightful place on the stage and I will be myself.",
-  "I am not a cosmic orphan.",
-  "I have no reason to be timid.",
-  "I will respond as I feel; awkwardly, vulgarly, but respond.",
-  "I will have my throat open, I will have my heart open, I will be vulnerable.",
-  "I may have anything or everything the world has to offer, but the thing I need most, and want most, is to be myself.",
-  "I will admit rejection, admit pain, admit frustration, admit even pettiness, admit shame, admit outrage, admit anything and everything that happens to me.",
-  "The best and most human parts of me are those that I have inhabited and hidden from the world.",
-  "I will work on it.",
-  "I will raise my voice.",
-  "I will be heard.",
-];
-
-const OCD_TOOLS = [
-  { id:"notice", icon:"◎", color:C.lavender, title:"Notice & Name", subtitle:"Defusion",
-    body:"When an intrusive thought arrives, you don't have to fight it or obey it. Simply name what's happening:",
-    steps:[`"I notice I'm having the thought that ___"`,`"There's a part of me that is frightened right now"`,`"This is OCD speaking. It is not the truth."`],
-    note:"Naming creates distance. You are the noticer — not the thought." },
-  { id:"parts", icon:"⬡", color:C.gold, title:"Meet the Part", subtitle:"IFS",
-    body:"OCD often shows up as a protective Part — anxious, urgent, trying to keep you safe. Instead of fighting it:",
-    steps:[`Get curious: "What are you afraid will happen if I don't listen to you?"`,`Offer compassion: "I see you. Thank you for trying to protect me."`,`Gently redirect: "I'm going to take care of us another way right now."`],
-    note:"Parts that feel heard tend to quiet down. You are the Self — larger than any one Part." },
-  { id:"body", icon:"〜", color:C.sage, title:"Return to the Body", subtitle:"Somatic grounding",
-    body:"Rumination lives in the mind. The body is always in the present moment. Use it as your anchor:",
-    steps:["Press both feet firmly into the floor. Feel the weight.","Name 5 things you can see in this room — slowly, with detail.","Place one hand on your chest. Breathe in for 4, out for 6."],
-    note:"You cannot be fully in your body and fully in a spiral at the same time." },
-  { id:"room", icon:"✦", color:C.rose, title:"Bring It Into the Room", subtitle:"The actor's superpower",
-    body:"You don't have to resolve the thought before you walk in. The audition room itself is an anchor:",
-    steps:["Notice the temperature of the air.","Make real eye contact with the reader or panel.","Let your scene partner's words actually land on you."],
-    note:"Presence is the antidote. The thought cannot follow you into a moment of genuine contact." },
-];
-
-const COMMUNITY_POSTS = [];
-
-const GOOD_LUCK_MESSAGES = [
-  "You've prepared for this. The room is lucky to have you in it. Go show them what you've got. ★",
-  "Today is your day. Walk in like you belong there — because you do. We're cheering for you. ★",
-  "You are so ready for this. Trust your preparation, trust yourself. Break a leg. ★",
-  "The work is done. Now just be yourself — that's always been enough. Rooting for you. ★",
-  "Step into that room with your whole heart. You've got this. We love you. ★",
-];
-
-const AVATAR_COLORS = [C.sage, C.rose, C.lavender, C.teal, C.gold];
-
-// ─── Storage helpers ──────────────────────────────────────────────────────
-function useStorage(key, defaultVal) {
-  const [val, setVal] = useState(() => {
-    try { const s = localStorage.getItem(key); return s ? JSON.parse(s) : defaultVal; } catch { return defaultVal; }
-  });
-  const set = useCallback((v) => {
-    setVal(prev => {
-      const next = typeof v === "function" ? v(prev) : v;
-      try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, [key]);
-  return [val, set];
-}
-
-// ─── Heart Button ─────────────────────────────────────────────────────────
-function Heart({ active, onToggle, size=16 }) {
-  return (
-    <button onClick={e => { e.stopPropagation(); onToggle(); }} style={{ background:"none", border:"none", cursor:"pointer", color:active?C.rose:C.muted, fontSize:size, lineHeight:1, padding:4, flexShrink:0, transition:"color 0.2s" }}>
-      {active ? "♥" : "♡"}
-    </button>
-  );
-}
-
-// ─── The Circle ───────────────────────────────────────────────────────────
-function TheCircle() {
-  const [friends, setFriends] = useStorage("circle_friends", []);
-  const [view, setView] = useState("list"); // list | friend | addFriend | addAudition | sendLuck
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const [newFriend, setNewFriend] = useState({ name:"", note:"" });
-  const [newAudition, setNewAudition] = useState({ role:"", date:"" });
-  const [sentFlash, setSentFlash] = useState({});
-  const [selectedMsg, setSelectedMsg] = useState(0);
-  const [customMsg, setCustomMsg] = useState("");
-  const [sendingTo, setSendingTo] = useState(null);
-
-  const today = new Date();
-  const daysUntil = d => Math.round((new Date(d) - today) / 86400000);
-
-  const addFriend = () => {
-    if (!newFriend.name.trim()) return;
-    const initials = newFriend.name.trim().split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
-    setFriends(f => [...f, { id:Date.now(), name:newFriend.name.trim(), initials, note:newFriend.note.trim(), color:AVATAR_COLORS[f.length%AVATAR_COLORS.length], auditions:[] }]);
-    setNewFriend({ name:"", note:"" }); setView("list");
-  };
-
-  const addAudition = (friendId) => {
-    if (!newAudition.role.trim() || !newAudition.date) return;
-    setFriends(f => f.map(fr => fr.id===friendId ? { ...fr, auditions:[...fr.auditions, { role:newAudition.role.trim(), date:newAudition.date, sent:false }] } : fr));
-    setNewAudition({ role:"", date:"" });
-    setView("friend");
-  };
-
-  const sendLuck = (friendId, audIdx) => {
-    const key = `${friendId}-${audIdx}`;
-    setFriends(f => f.map(fr => fr.id===friendId ? { ...fr, auditions:fr.auditions.map((a,i) => i===audIdx?{...a,sent:true}:a) } : fr));
-    setSentFlash(s => ({ ...s, [key]:true }));
     setSendingTo(null);
     setTimeout(() => setSentFlash(s => { const n={...s}; delete n[key]; return n; }), 3000);
   };
@@ -1299,45 +1140,19 @@ export default function ActorSanctuary() {
 
           {/* LIBRARY */}
           {tab==="library" && (
-            <div className="fu" style={{ display:"flex", flexDirection:"column", gap:16 }}>
-              <div><Heading>Video Library</Heading><p style={{ color:C.muted, fontSize:14 }}>Guidance from practitioners who understand the actor's world.</p></div>
-              {!practitioner ? PRACTITIONERS.map(p=>(
-                <div key={p.id} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"20px", transition:"all 0.2s" }}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor=p.color}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
-                  <div onClick={()=>setPractitioner(p)} style={{ display:"flex", alignItems:"center", gap:14, marginBottom:12, cursor:"pointer" }}>
-                    <div style={{ width:48, height:48, borderRadius:"50%", background:`${p.color}33`, border:`2px solid ${p.color}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:p.color, fontSize:13, flexShrink:0 }}>{p.avatar}</div>
-                    <div style={{ flex:1 }}><p style={{ fontWeight:600, fontSize:16, marginBottom:2 }}>{p.name}</p><p style={{ color:p.color, fontSize:13 }}>{p.specialty}</p></div>
-                    <span style={{ color:C.muted, fontSize:18 }}>→</span>
-                  </div>
-                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-                    {p.videos.map(v=>(
-                      <div key={v.id} style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 0", borderTop:`1px solid ${C.border}` }}>
-                        <span style={{ color:p.color, fontSize:14 }}>▷</span>
-                        <div style={{ flex:1 }}><p style={{ fontSize:14, color:C.text }}>{v.title}</p><p style={{ fontSize:12, color:C.muted }}>{v.duration} · {v.tag}</p></div>
-                        <Heart active={favVideos.includes(v.id)} onToggle={()=>toggleFavVideo(v.id)} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )) : (
-                <div>
-                  <button onClick={()=>setPractitioner(null)} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, marginBottom:16 }}>← All practitioners</button>
-                  <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:18, padding:18, background:C.card, borderRadius:16 }}>
-                    <div style={{ width:56, height:56, borderRadius:"50%", background:`${practitioner.color}33`, border:`2px solid ${practitioner.color}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:practitioner.color, fontSize:16 }}>{practitioner.avatar}</div>
-                    <div><h3 style={{ fontFamily:"'DM Serif Display',serif", fontSize:22 }}>{practitioner.name}</h3><p style={{ color:practitioner.color }}>{practitioner.specialty}</p></div>
-                  </div>
-                  {practitioner.videos.map(v=>(
-                    <div key={v.id} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:"16px 18px", display:"flex", alignItems:"center", gap:14, marginBottom:10, transition:"all 0.2s" }}
-                      onMouseEnter={e=>e.currentTarget.style.borderColor=practitioner.color}
-                      onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
-                      <div style={{ width:42, height:42, borderRadius:"50%", background:`${practitioner.color}22`, border:`1px solid ${practitioner.color}55`, display:"flex", alignItems:"center", justifyContent:"center", color:practitioner.color, fontSize:16, flexShrink:0 }}>▷</div>
-                      <div style={{ flex:1 }}><p style={{ fontWeight:600, marginBottom:4, fontSize:15 }}>{v.title}</p><div style={{ display:"flex", gap:8 }}><span style={{ fontSize:12, color:C.muted }}>{v.duration}</span><span style={{ fontSize:11, padding:"2px 10px", borderRadius:10, background:`${practitioner.color}22`, color:practitioner.color }}>{v.tag}</span></div></div>
-                      <Heart active={favVideos.includes(v.id)} onToggle={()=>toggleFavVideo(v.id)} size={18} />
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+              <div>
+                <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Video Library</h2>
+                <p style={{ color:C.muted, fontSize:14 }}>Guidance from practitioners who understand the actor's world.</p>
+              </div>
+              <div style={{ textAlign:"center", padding:"48px 28px", border:`1px dashed ${C.border}`, borderRadius:20, background:C.card }}>
+                <p style={{ fontSize:36, marginBottom:16 }}>▷</p>
+                <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:24, marginBottom:12 }}>Coming Soon</p>
+                <p style={{ color:C.muted, fontSize:14, lineHeight:1.8, maxWidth:340, margin:"0 auto" }}>
+                  We're curating a library of videos from practitioners who truly understand the actor's journey — breathwork, somatic movement, performance psychology and more.
+                </p>
+                <p style={{ color:C.gold, fontSize:13, marginTop:20, fontStyle:"italic" }}>Watch this space. ✦</p>
+              </div>
             </div>
           )}
 
