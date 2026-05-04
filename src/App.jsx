@@ -30,9 +30,9 @@ const BOTTOM_NAV = [
 
 const GOOD_LUCK_MESSAGES = [
   "You've prepared for this. The room is lucky to have you in it. Go show them what you've got. ★",
-  "Today is your day. Walk in like you belong there — because you do. We're cheering for you. ★",
+  "Today is your day. Walk in like you belong there - because you do. We're cheering for you. ★",
   "You are so ready for this. Trust your preparation, trust yourself. Break a leg. ★",
-  "The work is done. Now just be yourself — that's always been enough. Rooting for you. ★",
+  "The work is done. Now just be yourself - that's always been enough. Rooting for you. ★",
   "Step into that room with your whole heart. You've got this. We love you. ★",
 ];
 
