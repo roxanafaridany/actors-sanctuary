@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const C = {
@@ -162,10 +161,7 @@ function Heart({ active, onToggle, size=16 }) {
 
 // ─── The Circle ───────────────────────────────────────────────────────────
 function TheCircle() {
-  const [friends, setFriends] = useStorage("circle_friends", [
-    { id:1, name:"Sophie H.", initials:"SH", color:C.rose, auditions:[{ role:"Lady Macbeth — National Theatre", date:"2026-05-10", sent:false }]},
-    { id:2, name:"Declan W.", initials:"DW", color:C.sage, auditions:[{ role:"Callbacks — Menier Chocolate Factory", date:"2026-05-06", sent:true }]},
-  ]);
+  const [friends, setFriends] = useStorage("circle_friends", []);
   const [showAdd, setShowAdd] = useState(false);
   const [showAddAudition, setShowAddAudition] = useState(null);
   const [newFriend, setNewFriend] = useState({ name:"" });
@@ -620,20 +616,27 @@ function RitualBuilder({ ritualSteps, setRitualSteps, savedRitual, setSavedRitua
   );
 }
 
+// Defined outside component to avoid dependency warning
+const BREATH_PHASES = [
+  { name:"inhale",label:"Breathe In",duration:4,next:"hold" },
+  { name:"hold",  label:"Hold",       duration:7,next:"exhale" },
+  { name:"exhale",label:"Breathe Out",duration:8,next:"rest" },
+  { name:"rest",  label:"Rest",       duration:1,next:"inhale" },
+];
+
 function BreathCircle() {
   const [phase, setPhase] = useState("ready"); const [count, setCount] = useState(0);
   const [cycles, setCycles] = useState(0); const [running, setRunning] = useState(false);
   const timerRef = useRef(null);
-  const PHASES = [{ name:"inhale",label:"Breathe In",duration:4,next:"hold"},{name:"hold",label:"Hold",duration:7,next:"exhale"},{name:"exhale",label:"Breathe Out",duration:8,next:"rest"},{name:"rest",label:"Rest",duration:1,next:"inhale"}];
   useEffect(() => {
     if (!running) return;
     if (phase==="ready") { setPhase("inhale"); setCount(4); return; }
-    const cur = PHASES.find(p=>p.name===phase); if (!cur) return;
-    if (count<=0) { if(cur.name==="exhale") setCycles(c=>c+1); const nxt=PHASES.find(p=>p.name===cur.next); setPhase(cur.next); setCount(nxt?.duration||4); return; }
+    const cur = BREATH_PHASES.find(p=>p.name===phase); if (!cur) return;
+    if (count<=0) { if(cur.name==="exhale") setCycles(c=>c+1); const nxt=BREATH_PHASES.find(p=>p.name===cur.next); setPhase(cur.next); setCount(nxt?.duration||4); return; }
     timerRef.current = setTimeout(()=>setCount(c=>c-1),1000); return ()=>clearTimeout(timerRef.current);
   }, [running,phase,count]);
   const stop = () => { setRunning(false); setPhase("ready"); setCount(0); clearTimeout(timerRef.current); };
-  const cur = PHASES.find(p=>p.name===phase);
+  const cur = BREATH_PHASES.find(p=>p.name===phase);
   return (
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:28, padding:"32px 0" }}>
       <div style={{ position:"relative", width:180, height:180, display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -657,9 +660,7 @@ function Journal({ favQuotes, onFavQuote }) {
   const [saved, setSaved] = useState(false);
   const [affIdx, setAffIdx] = useState(0);
   const [promptIdx, setPromptIdx] = useState(0);
-  const [entries, setEntries] = useStorage("journal_entries", [
-    { date:"May 1", prompt:"What am I bringing into the room today?", text:"I bring my curiosity and my truth. I've been working on this piece for weeks and it lives in me now." }
-  ]);
+  const [entries, setEntries] = useStorage("journal_entries", []);
   const [favAffs, setFavAffs] = useStorage("fav_affirmations", []);
 
   const save = () => {
