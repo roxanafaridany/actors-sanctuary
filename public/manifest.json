@@ -1,0 +1,11 @@
+{
+  "short_name": "Sanctuary",
+  "name": "The Actor's Sanctuary",
+  "description": "A mental health sanctuary for actors.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d12",
+  "theme_color": "#c8923a",
+  "orientation": "portrait",
+  "icons": []
+}
