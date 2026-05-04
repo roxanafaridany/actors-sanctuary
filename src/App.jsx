@@ -162,9 +162,9 @@ function Heart({ active, onToggle, size=16 }) {
 // ─── The Circle ───────────────────────────────────────────────────────────
 function TheCircle() {
   const [friends, setFriends] = useStorage("circle_friends", []);
-  const [showAdd, setShowAdd] = useState(false);
-  const [showAddAudition, setShowAddAudition] = useState(null);
-  const [newFriend, setNewFriend] = useState({ name:"" });
+  const [view, setView] = useState("list"); // list | friend | addFriend | addAudition | sendLuck
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [newFriend, setNewFriend] = useState({ name:"", note:"" });
   const [newAudition, setNewAudition] = useState({ role:"", date:"" });
   const [sentFlash, setSentFlash] = useState({});
   const [selectedMsg, setSelectedMsg] = useState(0);
@@ -177,14 +177,15 @@ function TheCircle() {
   const addFriend = () => {
     if (!newFriend.name.trim()) return;
     const initials = newFriend.name.trim().split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
-    setFriends(f => [...f, { id:Date.now(), name:newFriend.name.trim(), initials, color:AVATAR_COLORS[f.length%AVATAR_COLORS.length], auditions:[] }]);
-    setNewFriend({ name:"" }); setShowAdd(false);
+    setFriends(f => [...f, { id:Date.now(), name:newFriend.name.trim(), initials, note:newFriend.note.trim(), color:AVATAR_COLORS[f.length%AVATAR_COLORS.length], auditions:[] }]);
+    setNewFriend({ name:"", note:"" }); setView("list");
   };
 
   const addAudition = (friendId) => {
     if (!newAudition.role.trim() || !newAudition.date) return;
     setFriends(f => f.map(fr => fr.id===friendId ? { ...fr, auditions:[...fr.auditions, { role:newAudition.role.trim(), date:newAudition.date, sent:false }] } : fr));
-    setNewAudition({ role:"", date:"" }); setShowAddAudition(null);
+    setNewAudition({ role:"", date:"" });
+    setView("friend");
   };
 
   const sendLuck = (friendId, audIdx) => {
@@ -195,107 +196,207 @@ function TheCircle() {
     setTimeout(() => setSentFlash(s => { const n={...s}; delete n[key]; return n; }), 3000);
   };
 
+  const friend = friends.find(f=>f.id===selectedFriend);
   const msgToSend = customMsg.trim() || GOOD_LUCK_MESSAGES[selectedMsg];
 
+  // ── Friend detail view ──
+  if (view==="friend" && friend) {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+        <button onClick={()=>setView("list")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left", display:"flex", alignItems:"center", gap:6 }}>← Your circle</button>
+
+        {/* Friend header */}
+        <div style={{ display:"flex", alignItems:"center", gap:18, padding:"22px", background:C.card, border:`1px solid ${friend.color}44`, borderRadius:18 }}>
+          <div style={{ width:64, height:64, borderRadius:"50%", background:`${friend.color}33`, border:`2px solid ${friend.color}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:friend.color, fontSize:20, flexShrink:0 }}>{friend.initials}</div>
+          <div style={{ flex:1 }}>
+            <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:22 }}>{friend.name}</p>
+            {friend.note && <p style={{ color:C.muted, fontSize:13, marginTop:4, fontStyle:"italic" }}>{friend.note}</p>}
+          </div>
+          <button onClick={()=>{ setFriends(f=>f.filter(fr=>fr.id!==friend.id)); setView("list"); }} style={{ background:"none", border:`1px solid ${C.rose}55`, borderRadius:20, padding:"6px 14px", color:C.rose, cursor:"pointer", fontSize:12, flexShrink:0 }}>Remove</button>
+        </div>
+
+        {/* Upcoming auditions */}
+        {friend.auditions.length > 0 && (
+          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+            <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase" }}>Auditions</p>
+            {friend.auditions.map((aud,i) => {
+              const d=daysUntil(aud.date); const key=`${friend.id}-${i}`; const isPast=d<0; const isToday=d===0;
+              return (
+                <div key={i} style={{ background:C.card, border:`1px solid ${isToday?friend.color:C.border}`, borderRadius:14, padding:"16px 18px", display:"flex", alignItems:"center", gap:12 }}>
+                  <div style={{ flex:1 }}>
+                    <p style={{ fontSize:15, color:C.text, marginBottom:4, fontWeight:isToday?600:400 }}>{aud.role}</p>
+                    <p style={{ fontSize:12, color:isToday?friend.color:C.muted }}>
+                      {isPast?"Past":isToday?"Today! ○":d===1?"Tomorrow":`In ${d} days`} · {new Date(aud.date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}
+                    </p>
+                  </div>
+                  {!isPast && (
+                    sentFlash[key] ? <span style={{ fontSize:12, color:C.sage, fontWeight:600, flexShrink:0 }}>Sent ✓</span>
+                    : aud.sent ? <span style={{ fontSize:12, color:C.muted, flexShrink:0 }}>Luck sent ♡</span>
+                    : <button onClick={()=>{ setSendingTo({friendId:friend.id,audIdx:i}); setSelectedMsg(0); setCustomMsg(""); }} style={{ padding:"8px 16px", borderRadius:30, border:`1px solid ${friend.color}`, background:`${friend.color}15`, color:friend.color, cursor:"pointer", fontSize:13, flexShrink:0, whiteSpace:"nowrap", fontWeight:600 }}>Send luck ○</button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Add audition */}
+        {view==="friend" && (
+          <button onClick={()=>{ setNewAudition({role:"",date:""}); setView("addAudition"); }} style={{ background:"transparent", border:`1px dashed ${C.border}`, borderRadius:14, padding:"14px", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"center", transition:"all 0.2s" }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor=friend.color; e.currentTarget.style.color=friend.color; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.muted; }}>
+            + Add an audition for {friend.name}
+          </button>
+        )}
+
+        {/* Send luck modal */}
+        {sendingTo && (() => {
+          const aud = friend.auditions[sendingTo.audIdx]; if (!aud) return null;
+          return (
+            <div style={{ position:"fixed", inset:0, background:"#000000bb", backdropFilter:"blur(6px)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20 }}>
+              <div style={{ background:C.card, border:`1px solid ${friend.color}55`, borderRadius:20, padding:"28px 24px", maxWidth:420, width:"100%", maxHeight:"90vh", overflowY:"auto" }}>
+                <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:22, marginBottom:4 }}>Send good luck</p>
+                <p style={{ color:C.muted, fontSize:13, marginBottom:20 }}>to {friend.name} · {aud.role}</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:16 }}>
+                  {GOOD_LUCK_MESSAGES.map((msg,i) => (
+                    <button key={i} onClick={()=>{ setSelectedMsg(i); setCustomMsg(""); }} style={{ padding:"10px 14px", borderRadius:12, border:`1px solid ${selectedMsg===i&&!customMsg?friend.color:C.border}`, background:selectedMsg===i&&!customMsg?`${friend.color}15`:"transparent", color:selectedMsg===i&&!customMsg?C.text:C.muted, cursor:"pointer", textAlign:"left", fontSize:13, lineHeight:1.5 }}>{msg}</button>
+                  ))}
+                </div>
+                <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder={`Write something personal for ${friend.name}...`} style={{ width:"100%", background:C.bg, border:`1px solid ${customMsg?friend.color:C.border}`, borderRadius:10, padding:"10px 14px", color:C.text, fontSize:14, lineHeight:1.6, resize:"none", outline:"none", minHeight:80, fontFamily:"'Lato',sans-serif", boxSizing:"border-box", marginBottom:14 }} />
+                <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:10, padding:"10px 14px", marginBottom:18 }}>
+                  <p style={{ color:C.muted, fontSize:10, marginBottom:6, letterSpacing:1 }}>PREVIEW</p>
+                  <p style={{ color:C.text, fontSize:14, lineHeight:1.6, fontStyle:"italic" }}>{msgToSend}</p>
+                </div>
+                <div style={{ display:"flex", gap:10 }}>
+                  <button onClick={()=>sendLuck(friend.id,sendingTo.audIdx)} style={{ flex:1, padding:"12px", borderRadius:30, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:14 }}>Send via WhatsApp ○</button>
+                  <button onClick={()=>setSendingTo(null)} style={{ padding:"12px 16px", borderRadius:30, background:"transparent", border:`1px solid ${C.border}`, color:C.muted, cursor:"pointer", fontSize:13 }}>Cancel</button>
+                </div>
+                <p style={{ color:C.muted, fontSize:11, textAlign:"center", marginTop:10 }}>They don't need the app to receive this.</p>
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+    );
+  }
+
+  // ── Add audition view ──
+  if (view==="addAudition" && friend) {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+        <button onClick={()=>setView("friend")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left" }}>← Back to {friend.name}</button>
+        <div>
+          <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:26, fontWeight:400, marginBottom:6 }}>Add an audition</h2>
+          <p style={{ color:C.muted, fontSize:14 }}>for {friend.name}</p>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+          <div>
+            <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>ROLE OR PRODUCTION</p>
+            <input value={newAudition.role} onChange={e=>setNewAudition(a=>({...a,role:e.target.value}))} placeholder="e.g. Lady Macbeth — National Theatre" style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box" }} />
+          </div>
+          <div>
+            <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>DATE</p>
+            <input type="date" value={newAudition.date} onChange={e=>setNewAudition(a=>({...a,date:e.target.value}))} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box", colorScheme:"dark" }} />
+          </div>
+          <button onClick={()=>addAudition(friend.id)} style={{ padding:"13px", borderRadius:40, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:15, marginTop:6 }}>Save Audition</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Add friend view ──
+  if (view==="addFriend") {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+        <button onClick={()=>setView("list")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left" }}>← Your circle</button>
+        <div>
+          <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:26, fontWeight:400, marginBottom:6 }}>Add to your circle</h2>
+          <p style={{ color:C.muted, fontSize:14 }}>Someone whose journey you want to support.</p>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+          <div>
+            <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>THEIR NAME</p>
+            <input value={newFriend.name} onChange={e=>setNewFriend(f=>({...f,name:e.target.value}))} placeholder="e.g. Sophie" style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box" }} />
+          </div>
+          <div>
+            <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>A NOTE (optional)</p>
+            <input value={newFriend.note} onChange={e=>setNewFriend(f=>({...f,note:e.target.value}))} placeholder="e.g. my drama school mate, brilliant comedic actor..." style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box" }} />
+          </div>
+          {/* Avatar colour preview */}
+          <div style={{ display:"flex", alignItems:"center", gap:14, padding:"16px", background:C.card, borderRadius:14, border:`1px solid ${C.border}` }}>
+            <div style={{ width:52, height:52, borderRadius:"50%", background:`${AVATAR_COLORS[friends.length%AVATAR_COLORS.length]}33`, border:`2px solid ${AVATAR_COLORS[friends.length%AVATAR_COLORS.length]}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:AVATAR_COLORS[friends.length%AVATAR_COLORS.length], fontSize:16 }}>
+              {newFriend.name ? newFriend.name.trim().split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2) : "?"}
+            </div>
+            <div>
+              <p style={{ fontSize:15, color:newFriend.name?C.text:C.muted }}>{newFriend.name || "Their name"}</p>
+              {newFriend.note && <p style={{ fontSize:13, color:C.muted, fontStyle:"italic", marginTop:3 }}>{newFriend.note}</p>}
+            </div>
+          </div>
+          <button onClick={addFriend} style={{ padding:"13px", borderRadius:40, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:15, marginTop:6 }}>Add to Circle ○</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Main list view ──
   return (
-    <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
+    <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
       <div>
         <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>The Circle</h2>
-        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Your people. Save their auditions and send a good luck message on the day — they don't need the app.</p>
+        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Your people. Add their auditions and send them luck on the day — they don't need the app.</p>
       </div>
 
+      {/* Coming up soon */}
       {friends.some(f => f.auditions.some(a => daysUntil(a.date)>=0 && daysUntil(a.date)<=3)) && (
         <div style={{ background:`${C.gold}12`, border:`1px solid ${C.gold}44`, borderRadius:14, padding:"14px 18px" }}>
-          <p style={{ color:C.gold, fontSize:13, fontWeight:600, marginBottom:6 }}>○ Coming up soon</p>
+          <p style={{ color:C.gold, fontSize:12, fontWeight:600, marginBottom:8, letterSpacing:1 }}>○ COMING UP SOON</p>
           {friends.map(fr => fr.auditions.map((a,i) => {
-            const d = daysUntil(a.date);
-            if (d<0||d>3) return null;
-            return <p key={`${fr.id}-${i}`} style={{ color:C.text, fontSize:13, lineHeight:1.7 }}><span style={{ color:fr.color }}>{fr.name}</span> — {a.role} {d===0?"is today!":d===1?"is tomorrow":`is in ${d} days`}</p>;
+            const d=daysUntil(a.date); if(d<0||d>3) return null;
+            return <p key={`${fr.id}-${i}`} style={{ color:C.text, fontSize:13, lineHeight:1.8 }}><span style={{ color:fr.color, fontWeight:600 }}>{fr.name}</span> — {a.role} · {d===0?"today!":d===1?"tomorrow":`in ${d} days`}</p>;
           }))}
         </div>
       )}
 
-      {friends.map(friend => (
-        <div key={friend.id} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"20px" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
-            <div style={{ width:46, height:46, borderRadius:"50%", background:`${friend.color}33`, border:`2px solid ${friend.color}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:friend.color, fontSize:14, flexShrink:0 }}>{friend.initials}</div>
-            <div style={{ flex:1 }}><p style={{ fontWeight:600, fontSize:16 }}>{friend.name}</p><p style={{ fontSize:12, color:C.muted }}>{friend.auditions.length} audition{friend.auditions.length!==1?"s":""} saved</p></div>
-          </div>
-          {friend.auditions.length > 0 && (
-            <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:14 }}>
-              {friend.auditions.map((aud,i) => {
-                const d = daysUntil(aud.date); const key=`${friend.id}-${i}`; const isPast=d<0; const isToday=d===0;
-                return (
-                  <div key={i} style={{ background:C.bg, border:`1px solid ${isToday?friend.color:C.border}`, borderRadius:12, padding:"12px 16px", display:"flex", alignItems:"center", gap:12 }}>
-                    <div style={{ flex:1 }}>
-                      <p style={{ fontSize:14, color:C.text, marginBottom:3, fontWeight:isToday?600:400 }}>{aud.role}</p>
-                      <p style={{ fontSize:12, color:isToday?friend.color:C.muted }}>{isPast?"Past":isToday?"Today! ○":d===1?"Tomorrow":`In ${d} days`} · {new Date(aud.date).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</p>
-                    </div>
-                    {!isPast && (sentFlash[key] ? <span style={{ fontSize:12, color:C.sage, fontWeight:600, flexShrink:0 }}>Sent ✓</span> : aud.sent ? <span style={{ fontSize:12, color:C.muted, flexShrink:0 }}>Luck sent ♡</span> : <button onClick={() => setSendingTo({friendId:friend.id,audIdx:i})} style={{ padding:"7px 14px", borderRadius:30, border:`1px solid ${friend.color}`, background:"transparent", color:friend.color, cursor:"pointer", fontSize:12, flexShrink:0, whiteSpace:"nowrap" }}>Send luck ○</button>)}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          {showAddAudition===friend.id ? (
-            <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:12, padding:"14px 16px", display:"flex", flexDirection:"column", gap:10 }}>
-              <input value={newAudition.role} onChange={e=>setNewAudition(a=>({...a,role:e.target.value}))} placeholder="Role or production..." style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"8px 12px", color:C.text, fontSize:14, outline:"none", width:"100%", boxSizing:"border-box" }} />
-              <input type="date" value={newAudition.date} onChange={e=>setNewAudition(a=>({...a,date:e.target.value}))} style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"8px 12px", color:C.text, fontSize:14, outline:"none", width:"100%", boxSizing:"border-box", colorScheme:"dark" }} />
-              <div style={{ display:"flex", gap:8 }}>
-                <button onClick={() => addAudition(friend.id)} style={{ padding:"8px 20px", borderRadius:30, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:13 }}>Save</button>
-                <button onClick={() => setShowAddAudition(null)} style={{ padding:"8px 16px", borderRadius:30, background:"transparent", border:`1px solid ${C.border}`, color:C.muted, cursor:"pointer", fontSize:13 }}>Cancel</button>
-              </div>
-            </div>
-          ) : (
-            <button onClick={() => setShowAddAudition(friend.id)} style={{ background:"transparent", border:`1px dashed ${C.border}`, borderRadius:10, padding:"9px 16px", color:C.muted, cursor:"pointer", fontSize:13, width:"100%", textAlign:"center" }}>+ Add audition</button>
-          )}
+      {/* Friends list */}
+      {friends.length === 0 && (
+        <div style={{ textAlign:"center", padding:"40px 24px", border:`1px dashed ${C.border}`, borderRadius:18 }}>
+          <p style={{ fontSize:28, marginBottom:12 }}>○</p>
+          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.muted, marginBottom:8 }}>Your circle is waiting.</p>
+          <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Add your actor friends and support them on their audition days.</p>
         </div>
-      ))}
-
-      {showAdd ? (
-        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"20px" }}>
-          <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:18, marginBottom:14 }}>Add someone to your circle</p>
-          <input value={newFriend.name} onChange={e=>setNewFriend(f=>({...f,name:e.target.value}))} placeholder="Their name..." style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 14px", color:C.text, fontSize:14, outline:"none", width:"100%", boxSizing:"border-box", marginBottom:12 }} />
-          <div style={{ display:"flex", gap:8 }}>
-            <button onClick={addFriend} style={{ padding:"10px 24px", borderRadius:30, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:14 }}>Add to Circle</button>
-            <button onClick={() => setShowAdd(false)} style={{ padding:"10px 16px", borderRadius:30, background:"transparent", border:`1px solid ${C.border}`, color:C.muted, cursor:"pointer", fontSize:13 }}>Cancel</button>
-          </div>
-        </div>
-      ) : (
-        <button onClick={() => setShowAdd(true)} style={{ background:"transparent", border:`1px dashed ${C.border}`, borderRadius:14, padding:"16px", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"center", transition:"all 0.2s" }}
-          onMouseEnter={e=>{ e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.color=C.gold; }}
-          onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.muted; }}>
-          + Add someone to your circle
-        </button>
       )}
 
-      {sendingTo && (() => {
-        const friend = friends.find(f=>f.id===sendingTo.friendId); const aud = friend?.auditions[sendingTo.audIdx];
-        if (!friend||!aud) return null;
-        return (
-          <div style={{ position:"fixed", inset:0, background:"#000000aa", backdropFilter:"blur(6px)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20 }}>
-            <div style={{ background:C.card, border:`1px solid ${C.gold}55`, borderRadius:20, padding:"28px 24px", maxWidth:420, width:"100%" }}>
-              <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:22, marginBottom:4 }}>Send good luck</p>
-              <p style={{ color:C.muted, fontSize:13, marginBottom:20 }}>to {friend.name} for {aud.role}</p>
-              <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:16 }}>
-                {GOOD_LUCK_MESSAGES.map((msg,i) => (
-                  <button key={i} onClick={() => { setSelectedMsg(i); setCustomMsg(""); }} style={{ padding:"10px 14px", borderRadius:12, border:`1px solid ${selectedMsg===i&&!customMsg?friend.color:C.border}`, background:selectedMsg===i&&!customMsg?`${friend.color}15`:"transparent", color:selectedMsg===i&&!customMsg?C.text:C.muted, cursor:"pointer", textAlign:"left", fontSize:13, lineHeight:1.5 }}>{msg}</button>
-                ))}
+      <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        {friends.map(fr => {
+          const upcoming = fr.auditions.filter(a=>daysUntil(a.date)>=0).length;
+          const nextAud = fr.auditions.filter(a=>daysUntil(a.date)>=0).sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
+          const d = nextAud ? daysUntil(nextAud.date) : null;
+          return (
+            <button key={fr.id} onClick={()=>{ setSelectedFriend(fr.id); setView("friend"); }}
+              style={{ display:"flex", alignItems:"center", gap:16, padding:"18px 20px", background:C.card, border:`1px solid ${C.border}`, borderRadius:16, cursor:"pointer", textAlign:"left", transition:"all 0.2s", width:"100%" }}
+              onMouseEnter={e=>{ e.currentTarget.style.borderColor=fr.color; e.currentTarget.style.background=C.cardHover; }}
+              onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background=C.card; }}>
+              <div style={{ width:52, height:52, borderRadius:"50%", background:`${fr.color}33`, border:`2px solid ${fr.color}`, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, color:fr.color, fontSize:15, flexShrink:0 }}>{fr.initials}</div>
+              <div style={{ flex:1 }}>
+                <p style={{ fontWeight:600, fontSize:16, marginBottom:3 }}>{fr.name}</p>
+                <p style={{ fontSize:13, color:C.muted }}>
+                  {nextAud
+                    ? <span style={{ color: d===0?fr.color:C.muted }}>{nextAud.role} · {d===0?"today!":d===1?"tomorrow":`in ${d} days`}</span>
+                    : fr.auditions.length > 0 ? "No upcoming auditions" : "No auditions yet"}
+                </p>
               </div>
-              <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder={`Write something personal for ${friend.name}...`} style={{ width:"100%", background:C.bg, border:`1px solid ${customMsg?friend.color:C.border}`, borderRadius:10, padding:"10px 14px", color:C.text, fontSize:14, lineHeight:1.6, resize:"none", outline:"none", minHeight:80, fontFamily:"'Lato',sans-serif", boxSizing:"border-box", marginBottom:16 }} />
-              <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:10, padding:"10px 14px", marginBottom:18 }}>
-                <p style={{ color:C.muted, fontSize:11, marginBottom:6 }}>PREVIEW</p>
-                <p style={{ color:C.text, fontSize:14, lineHeight:1.6, fontStyle:"italic" }}>{msgToSend}</p>
-              </div>
-              <div style={{ display:"flex", gap:10 }}>
-                <button onClick={() => sendLuck(friend.id, sendingTo.audIdx)} style={{ flex:1, padding:"12px", borderRadius:30, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:14 }}>Send via WhatsApp ○</button>
-                <button onClick={() => setSendingTo(null)} style={{ padding:"12px 18px", borderRadius:30, background:"transparent", border:`1px solid ${C.border}`, color:C.muted, cursor:"pointer", fontSize:13 }}>Cancel</button>
-              </div>
-              <p style={{ color:C.muted, fontSize:11, textAlign:"center", marginTop:12 }}>They don't need the app to receive this.</p>
-            </div>
-          </div>
-        );
-      })()}
+              <span style={{ color:C.muted, fontSize:18 }}>→</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Add friend button */}
+      <button onClick={()=>setView("addFriend")} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, background:"transparent", border:`1px dashed ${C.border}`, borderRadius:16, padding:"18px", color:C.muted, cursor:"pointer", fontSize:14, transition:"all 0.2s" }}
+        onMouseEnter={e=>{ e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.color=C.gold; }}
+        onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.muted; }}>
+        <span style={{ fontSize:20 }}>○</span> Add someone to your circle
+      </button>
     </div>
   );
 }
