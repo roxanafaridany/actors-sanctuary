@@ -1167,23 +1167,7 @@ export default function ActorSanctuary() {
           {/* RITUAL */}
           {tab==="ritual" && <RitualBuilder ritualSteps={ritualSteps} setRitualSteps={setRitualSteps} savedRitual={savedRitual} setSavedRitual={setSavedRitual} />}
 
-          {/* LIBRARY */}
-          {tab==="library" && (
-            <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
-              <div>
-                <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Video Library</h2>
-                <p style={{ color:C.muted, fontSize:14 }}>Guidance from practitioners who understand the actor's world.</p>
-              </div>
-              <div style={{ textAlign:"center", padding:"48px 28px", border:`1px dashed ${C.border}`, borderRadius:20, background:C.card }}>
-                <p style={{ fontSize:36, marginBottom:16 }}>▷</p>
-                <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:24, marginBottom:12 }}>Coming Soon</p>
-                <p style={{ color:C.muted, fontSize:14, lineHeight:1.8, maxWidth:340, margin:"0 auto" }}>
-                  We're curating a library of videos from practitioners who truly understand the actor's journey - breathwork, somatic movement, performance psychology and more.
-                </p>
-                <p style={{ color:C.gold, fontSize:13, marginTop:20, fontStyle:"italic" }}>Watch this space. ✦</p>
-              </div>
-            </div>
-          )}
+          
 
           {/* BREATHWORK */}
           {tab==="breathe" && (
