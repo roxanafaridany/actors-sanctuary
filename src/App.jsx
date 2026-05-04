@@ -368,7 +368,6 @@ function TheCircle() {
 
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
         {friends.map(fr => {
-          const upcoming = fr.auditions.filter(a=>daysUntil(a.date)>=0).length;
           const nextAud = fr.auditions.filter(a=>daysUntil(a.date)>=0).sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
           const d = nextAud ? daysUntil(nextAud.date) : null;
           return (
