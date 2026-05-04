@@ -10,7 +10,6 @@ const NAV = [
   { id:"home",      label:"Sanctuary",   icon:"✦" },
   { id:"mylibrary", label:"My Library",  icon:"☆" },
   { id:"ritual",   label:"Ritual",      icon:"◎" },
-  { id:"library",  label:"Videos",      icon:"▷" },
   { id:"breathe",  label:"Breathe",     icon:"〜" },
   { id:"ocd",      label:"OCD",         icon:"⬡" },
   { id:"journal",  label:"Journal",     icon:"✐" },
@@ -910,11 +909,10 @@ function Journal({ favQuotes, onFavQuote }) {
 function MyLibrary({ goTo }) {
   const [favAffs]     = useStorage("fav_affirmations", []);
   const [favQuotes]   = useStorage("fav_quotes", []);
-  const [favVideos]   = useStorage("fav_videos", []);
   const [savedRitual] = useStorage("saved_ritual", []);
   const [entries]     = useStorage("journal_entries", []);
 
-  const isEmpty = !favAffs.length && !favQuotes.length && !favVideos.length && !savedRitual.length && !entries.length;
+  const isEmpty = !favAffs.length && !favQuotes.length && !savedRitual.length && !entries.length;
 
   const Section = ({ title, icon, color, children, tab }) => (
     <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
@@ -976,18 +974,7 @@ function MyLibrary({ goTo }) {
         </Section>
       )}
 
-      {favVideos.length > 0 && (
-        <Section title="Saved Videos" icon="▷" color={C.sage} tab="library">
-          {favVideos.map((id,i) => { const v=ALL_VIDEOS.find(v=>v.id===id); if(!v) return null; return (
-            <div key={i} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:12, padding:"14px 18px", display:"flex", alignItems:"center", gap:12 }}>
-              <div style={{ width:36, height:36, borderRadius:"50%", background:`${v.color}22`, border:`1px solid ${v.color}55`, display:"flex", alignItems:"center", justifyContent:"center", color:v.color, fontSize:14, flexShrink:0 }}>▷</div>
-              <div>
-                <p style={{ fontSize:14, color:C.text, marginBottom:3 }}>{v.title}</p>
-                <p style={{ fontSize:12, color:C.muted }}>{v.practitioner} · {v.duration}</p>
-              </div>
-            </div>
-          );})}
-        </Section>
+              </Section>
       )}
 
       {entries.length > 0 && (
@@ -1011,7 +998,6 @@ function MyLibrary({ goTo }) {
 // ─── Main App ─────────────────────────────────────────────────────────────
 export default function ActorSanctuary() {
   const [tab, setTab] = useState("home");
-  const [practitioner, setPractitioner] = useState(null);
   const [activeOcd, setActiveOcd] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [affIdx, setAffIdx] = useState(0);
@@ -1022,7 +1008,6 @@ export default function ActorSanctuary() {
   const [ritualSteps, setRitualSteps] = useStorage("ritual_steps", []);
   const [savedRitual, setSavedRitual] = useStorage("saved_ritual", []);
   const [favQuotes, setFavQuotes] = useStorage("fav_quotes", []);
-  const [favVideos, setFavVideos] = useStorage("fav_videos", []);
 
   useEffect(() => {
     const t = setInterval(()=>setAffIdx(i=>(i+1)%AFFIRMATIONS.length), 6000);
@@ -1031,7 +1016,6 @@ export default function ActorSanctuary() {
 
   const goTo = (t) => { setTab(t); setMenuOpen(false); window.scrollTo(0,0); };
   const toggleFavQuote = id => setFavQuotes(f => f.includes(id)?f.filter(q=>q!==id):[...f,id]);
-  const toggleFavVideo = id => setFavVideos(f => f.includes(id)?f.filter(v=>v!==id):[...f,id]);
 
   const Heading = ({ children }) => <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>{children}</h2>;
 
