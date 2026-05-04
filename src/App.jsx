@@ -172,7 +172,7 @@ function TheCircle() {
         <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
           <div>
             <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>ROLE OR PRODUCTION</p>
-            <input value={newAudition.role} onChange={e=>setNewAudition(a=>({...a,role:e.target.value}))} placeholder="e.g. Lady Macbeth — National Theatre" style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box" }} />
+            <input value={newAudition.role} onChange={e=>setNewAudition(a=>({...a,role:e.target.value}))} placeholder="e.g. Lady Macbeth - National Theatre" style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:15, outline:"none", width:"100%", boxSizing:"border-box" }} />
           </div>
           <div>
             <p style={{ color:C.muted, fontSize:12, marginBottom:8, letterSpacing:1 }}>DATE</p>
@@ -223,7 +223,7 @@ function TheCircle() {
     <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
       <div>
         <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>The Circle</h2>
-        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Your people. Add their auditions and send them luck on the day — they don't need the app.</p>
+        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Your people. Add their auditions and send them luck on the day - they don't need the app.</p>
       </div>
 
       {/* Coming up soon */}
@@ -232,7 +232,7 @@ function TheCircle() {
           <p style={{ color:C.gold, fontSize:12, fontWeight:600, marginBottom:8, letterSpacing:1 }}>○ COMING UP SOON</p>
           {friends.map(fr => fr.auditions.map((a,i) => {
             const d=daysUntil(a.date); if(d<0||d>3) return null;
-            return <p key={`${fr.id}-${i}`} style={{ color:C.text, fontSize:13, lineHeight:1.8 }}><span style={{ color:fr.color, fontWeight:600 }}>{fr.name}</span> — {a.role} · {d===0?"today!":d===1?"tomorrow":`in ${d} days`}</p>;
+            return <p key={`${fr.id}-${i}`} style={{ color:C.text, fontSize:13, lineHeight:1.8 }}><span style={{ color:fr.color, fontWeight:600 }}>{fr.name}</span> - {a.role} · {d===0?"today!":d===1?"tomorrow":`in ${d} days`}</p>;
           }))}
         </div>
       )}
@@ -284,12 +284,12 @@ const RESTING_AFFIRMATIONS = [
   "I am not my last job. I am not my next job. I am the work itself.",
   "Rest is not the opposite of readiness. It is part of it.",
   "The industry's silence says nothing about my worth.",
-  "I am an artist in every season — working or not.",
+  "I am an artist in every season - working or not.",
   "This period is not the end of my story. It is a chapter in it.",
   "The gap does not define me. What I do inside it does.",
   "I am allowed to grieve the work I don't have. And I am allowed to keep going.",
   "Every actor I admire has stood exactly where I'm standing now.",
-  "My instrument — my body, my voice, my heart — is still here. Still mine.",
+  "My instrument - my body, my voice, my heart - is still here. Still mine.",
   "Resting is not disappearing. It is waiting with intention.",
 ];
 
@@ -299,7 +299,7 @@ const RESTING_STORIES = [
     color: C.sage,
     initials: "BC",
     gap: "Years of small TV roles into his late 40s",
-    story: "Before Breaking Bad, Cranston was best known as the dad in Malcolm in the Middle — a beloved but lightweight role. For years he struggled to be taken seriously for dramatic work. He was 50 when Vince Gilligan cast him as Walter White, a role almost everyone else passed on. He has spoken openly about the years of uncertainty, the sense that his window was closing, and how he learned to find meaning in the work itself rather than the outcome.",
+    story: "Before Breaking Bad, Cranston was best known as the dad in Malcolm in the Middle - a beloved but lightweight role. For years he struggled to be taken seriously for dramatic work. He was 50 when Vince Gilligan cast him as Walter White, a role almost everyone else passed on. He has spoken openly about the years of uncertainty, the sense that his window was closing, and how he learned to find meaning in the work itself rather than the outcome.",
     quote: "I just focused on the work. I stopped worrying about whether it would lead anywhere.",
   },
   {
@@ -307,7 +307,7 @@ const RESTING_STORIES = [
     color: C.rose,
     initials: "VD",
     gap: "Decades of supporting roles before her breakthrough",
-    story: "Davis spent over twenty years working steadily but largely unseen in supporting roles in film and television. She has described growing up in poverty, being told repeatedly she wasn't the right type, and pushing through years of invisibility. Her performance in Doubt (2008) — which she shot in two days — earned her an Oscar nomination. She was in her forties. How to Get Away with Murder and Fences followed, and with them, the recognition that had been earned across a lifetime of quiet work.",
+    story: "Davis spent over twenty years working steadily but largely unseen in supporting roles in film and television. She has described growing up in poverty, being told repeatedly she wasn't the right type, and pushing through years of invisibility. Her performance in Doubt (2008) - which she shot in two days - earned her an Oscar nomination. She was in her forties. How to Get Away with Murder and Fences followed, and with them, the recognition that had been earned across a lifetime of quiet work.",
     quote: "My career didn't happen overnight. It happened over decades of showing up.",
   },
   {
@@ -323,7 +323,7 @@ const RESTING_STORIES = [
     color: C.teal,
     initials: "TS",
     gap: "Leukaemia diagnosis mid-career",
-    story: "In 1996, at a pivotal point in his career, Spall was diagnosed with acute myeloid leukaemia and told he had a 50/50 chance of survival. He spent two years in and out of hospitals, uncertain if he would ever work again. He came back. He went on to work with Mike Leigh, Tim Burton and many others, and delivered one of the most celebrated British screen performances of his generation in Mr Turner — the role he had to fight his way back from death to reach.",
+    story: "In 1996, at a pivotal point in his career, Spall was diagnosed with acute myeloid leukaemia and told he had a 50/50 chance of survival. He spent two years in and out of hospitals, uncertain if he would ever work again. He came back. He went on to work with Mike Leigh, Tim Burton and many others, and delivered one of the most celebrated British screen performances of his generation in Mr Turner - the role he had to fight his way back from death to reach.",
     quote: "I was given a second chance at life and at the thing I love most. I wasn't going to waste either.",
   },
   {
@@ -492,7 +492,7 @@ function AuditionLog() {
 
         {/* Presence rating */}
         <div>
-          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>How present did you feel? (1–5)</p>
+          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>How present did you feel? (1-5)</p>
           <div style={{ display:"flex", gap:10 }}>
             {[1,2,3,4,5].map(n => (
               <button key={n} onClick={()=>setForm(f=>({...f,presence:n}))} style={{ width:44, height:44, borderRadius:"50%", border:`2px solid ${n<=form.presence?C.gold:C.border}`, background:n<=form.presence?`${C.gold}22`:"transparent", color:n<=form.presence?C.gold:C.muted, cursor:"pointer", fontSize:15, fontWeight:600, transition:"all 0.2s" }}>{n}</button>
@@ -613,7 +613,7 @@ function RestingTab() {
       <div>
         <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>The Rest</h2>
         <p style={{ color:C.muted, fontSize:14, lineHeight:1.7, maxWidth:500 }}>
-          Not working is part of working. This space is for the in-between — the waiting, the wondering, and the quiet courage it takes to keep believing in yourself when the phone isn't ringing.
+          Not working is part of working. This space is for the in-between - the waiting, the wondering, and the quiet courage it takes to keep believing in yourself when the phone isn't ringing.
         </p>
       </div>
 
@@ -622,7 +622,7 @@ function RestingTab() {
         <div style={{ position:"absolute", top:-30, right:-30, width:140, height:140, borderRadius:"50%", background:`${C.lavender}08` }} />
         <p style={{ color:C.lavender, fontSize:10, letterSpacing:3, textTransform:"uppercase", marginBottom:12 }}>A reminder</p>
         <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.text, lineHeight:1.7 }}>
-          The gap has a name. It is not failure.<br/>It is not a sign.<br/>It is the industry — and it happens to everyone.
+          The gap has a name. It is not failure.<br/>It is not a sign.<br/>It is the industry - and it happens to everyone.
         </p>
       </div>
 
@@ -668,7 +668,7 @@ function RestingTab() {
                   <p style={{ color:C.text, fontSize:14, lineHeight:1.8, marginBottom:16 }}>{story.story}</p>
                   <div style={{ background:`${story.color}10`, border:`1px solid ${story.color}33`, borderRadius:12, padding:"14px 18px" }}>
                     <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:16, fontStyle:"italic", color:story.color, lineHeight:1.6 }}>"{story.quote}"</p>
-                    <p style={{ color:C.muted, fontSize:12, marginTop:8 }}>— {story.name}</p>
+                    <p style={{ color:C.muted, fontSize:12, marginTop:8 }}>- {story.name}</p>
                   </div>
                 </div>
               )}
@@ -705,25 +705,25 @@ function RestingTab() {
 // ─── Ritual Builder ───────────────────────────────────────────────────────
 const RITUAL_CONTENT = {
   ground: {
-    title:"Ground", color:"#7a9e8a", instruction:"Take a moment to arrive in your body.", duration:"2–3 minutes",
-    steps:["Stand or sit with both feet flat on the floor.","Feel the weight of your body — let gravity hold you.","Press your feet down gently. Notice the floor beneath you.","Take three slow breaths. With each exhale, soften your jaw, your shoulders, your hands.","Say quietly to yourself: I am here. I am ready."],
+    title:"Ground", color:"#7a9e8a", instruction:"Take a moment to arrive in your body.", duration:"2-3 minutes",
+    steps:["Stand or sit with both feet flat on the floor.","Feel the weight of your body - let gravity hold you.","Press your feet down gently. Notice the floor beneath you.","Take three slow breaths. With each exhale, soften your jaw, your shoulders, your hands.","Say quietly to yourself: I am here. I am ready."],
   },
   breathe: {
-    title:"Breathe", color:"#9a8ec0", instruction:"Regulate your nervous system with the 4–7–8 breath.", duration:"3–4 minutes",
+    title:"Breathe", color:"#9a8ec0", instruction:"Regulate your nervous system with the 4-7-8 breath.", duration:"3-4 minutes",
     steps:["Breathe in through your nose for 4 counts.","Hold for 7 counts.","Exhale slowly through your mouth for 8 counts.","Repeat three to four times.","Notice the shift. Your body knows how to calm itself."],
   },
   affirm: {
-    title:"Affirm", color:"#c8923a", instruction:"Choose one affirmation and let it land.", duration:"1–2 minutes",
+    title:"Affirm", color:"#c8923a", instruction:"Choose one affirmation and let it land.", duration:"1-2 minutes",
     affirmations:true,
-    steps:["Read your affirmation aloud — not in your head. Out loud.","Say it again, slower.","Close your eyes. Breathe it in.","Let it be true right now, even if only for this moment."],
+    steps:["Read your affirmation aloud - not in your head. Out loud.","Say it again, slower.","Close your eyes. Breathe it in.","Let it be true right now, even if only for this moment."],
   },
   release: {
     title:"Release", color:"#c47a7a", instruction:"Let go of what you are carrying into the room.", duration:"2 minutes",
     steps:["Name one thing you are worried about. Say it or write it down.","Now say: I acknowledge this. And I am choosing to set it down.","Shake out your hands. Shake out your arms.","Roll your shoulders back. Open your chest.","Take one deep breath and exhale it all out."],
   },
   arrive: {
-    title:"Arrive", color:"#5a9e9a", instruction:"Step into who you are about to be.", duration:"1–2 minutes",
-    steps:["Stand tall. Feet hip-width apart.","Take up your full space — no shrinking.","Think of one moment in your life when you felt completely alive.","Carry that with you as you walk through the door.","You are not auditioning for approval. You are sharing your art."],
+    title:"Arrive", color:"#5a9e9a", instruction:"Step into who you are about to be.", duration:"1-2 minutes",
+    steps:["Stand tall. Feet hip-width apart.","Take up your full space - no shrinking.","Think of one moment in your life when you felt completely alive.","Carry that with you as you walk through the door.","You are not auditioning for approval. You are sharing your art."],
   },
 };
 
@@ -836,7 +836,7 @@ function RitualBuilder({ ritualSteps, setRitualSteps, savedRitual, setSavedRitua
 
       {ritualSteps.length > 0 ? (
         <div style={{ background:`${C.gold}10`, border:`1px solid ${C.gold}55`, borderRadius:16, padding:"20px 22px" }}>
-          <p style={{ color:C.gold, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:12 }}>Your Ritual — {ritualSteps.length} step{ritualSteps.length!==1?"s":""}</p>
+          <p style={{ color:C.gold, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:12 }}>Your Ritual - {ritualSteps.length} step{ritualSteps.length!==1?"s":""}</p>
           <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginBottom:18 }}>
             {ritualSteps.map(id=>{ const s=RITUAL_STEPS.find(r=>r.id===id); if(!s) return null; return <span key={id} style={{ padding:"5px 14px", borderRadius:20, background:`${s.color}22`, border:`1px solid ${s.color}55`, color:s.color, fontSize:13 }}>{s.icon} {s.label}</span>; })}
           </div>
@@ -974,7 +974,7 @@ function MyLibrary({ goTo }) {
     <div style={{ display:"flex", flexDirection:"column", gap:28 }}>
       <div>
         <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>My Library</h2>
-        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Everything you've saved — your rituals, your words, your favourites.</p>
+        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Everything you've saved - your rituals, your words, your favourites.</p>
       </div>
 
       {isEmpty && (
@@ -1012,7 +1012,7 @@ function MyLibrary({ goTo }) {
           {favQuotes.map((id,i) => { const q=ACTOR_QUOTES.find(q=>q.id===id); if(!q) return null; return (
             <div key={i} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:12, padding:"14px 18px" }}>
               <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:15, fontStyle:"italic", color:C.text, lineHeight:1.6, marginBottom:8 }}>"{q.text}"</p>
-              <p style={{ color:C.muted, fontSize:12 }}>— {q.author}</p>
+              <p style={{ color:C.muted, fontSize:12 }}>- {q.author}</p>
             </div>
           );})}
         </Section>
@@ -1177,7 +1177,7 @@ export default function ActorSanctuary() {
                 <p style={{ fontSize:36, marginBottom:16 }}>▷</p>
                 <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:24, marginBottom:12 }}>Coming Soon</p>
                 <p style={{ color:C.muted, fontSize:14, lineHeight:1.8, maxWidth:340, margin:"0 auto" }}>
-                  We're curating a library of videos from practitioners who truly understand the actor's journey — breathwork, somatic movement, performance psychology and more.
+                  We're curating a library of videos from practitioners who truly understand the actor's journey - breathwork, somatic movement, performance psychology and more.
                 </p>
                 <p style={{ color:C.gold, fontSize:13, marginTop:20, fontStyle:"italic" }}>Watch this space. ✦</p>
               </div>
@@ -1192,7 +1192,7 @@ export default function ActorSanctuary() {
           {/* OCD */}
           {tab==="ocd" && (
             <div className="fu" style={{ display:"flex", flexDirection:"column", gap:18 }}>
-              <div><Heading>OCD Support</Heading><p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Intrusive thoughts can be present — and you can still show up fully.</p></div>
+              <div><Heading>OCD Support</Heading><p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Intrusive thoughts can be present - and you can still show up fully.</p></div>
               <div style={{ background:`${C.teal}12`, border:`1px solid ${C.teal}44`, borderRadius:14, padding:"14px 18px" }}>
                 <p style={{ color:C.teal, fontSize:14, lineHeight:1.8 }}><strong>A reminder:</strong> The thought is not the truth. You don't have to resolve it before you walk in. You just have to be in the room.</p>
               </div>
@@ -1218,15 +1218,15 @@ export default function ActorSanctuary() {
                 ))}
               </div>
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"20px" }}>
-                <p style={{ color:C.gold, fontSize:10, letterSpacing:2, textTransform:"uppercase", marginBottom:14 }}>Quick Grounding — Right Now</p>
-                {["Press both feet into the floor. Feel the ground hold you.","Name 3 colours you can see from where you are.","Take one slow breath — in through the nose, out through the mouth.",`Say aloud or silently: "I am here. I am safe. The thought is just a thought."`].map((s,i)=>(
+                <p style={{ color:C.gold, fontSize:10, letterSpacing:2, textTransform:"uppercase", marginBottom:14 }}>Quick Grounding - Right Now</p>
+                {["Press both feet into the floor. Feel the ground hold you.","Name 3 colours you can see from where you are.","Take one slow breath - in through the nose, out through the mouth.",`Say aloud or silently: "I am here. I am safe. The thought is just a thought."`].map((s,i)=>(
                   <div key={i} style={{ display:"flex", gap:12, alignItems:"flex-start", marginBottom:12 }}>
                     <div style={{ width:22, height:22, borderRadius:"50%", border:`1px solid ${C.gold}55`, background:`${C.gold}11`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:C.gold, flexShrink:0 }}>{i+1}</div>
                     <p style={{ color:C.text, fontSize:14, lineHeight:1.6, paddingTop:1, fontStyle:s.startsWith('"')?"italic":"normal" }}>{s}</p>
                   </div>
                 ))}
               </div>
-              <p style={{ color:C.muted, fontSize:12, lineHeight:1.8, borderTop:`1px solid ${C.border}`, paddingTop:14 }}>These tools draw on ACT, IFS, and somatic grounding. They complement — but don't replace — working with a therapist. The IOCDF (iocdf.org) can help you find a specialist.</p>
+              <p style={{ color:C.muted, fontSize:12, lineHeight:1.8, borderTop:`1px solid ${C.border}`, paddingTop:14 }}>These tools draw on ACT, IFS, and somatic grounding. They complement - but don't replace - working with a therapist. The IOCDF (iocdf.org) can help you find a specialist.</p>
             </div>
           )}
 
@@ -1243,7 +1243,7 @@ export default function ActorSanctuary() {
                 <div style={{ position:"absolute", top:-10, left:-10, fontSize:100, color:`${C.gold}08`, fontFamily:"Georgia,serif", lineHeight:1, userSelect:"none" }}>"</div>
                 <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:21, fontStyle:"italic", lineHeight:1.65, color:C.text, marginBottom:16, position:"relative" }}>{ACTOR_QUOTES[quoteIdx].text}</p>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                  <p style={{ color:C.gold, fontSize:14 }}>— {ACTOR_QUOTES[quoteIdx].author}</p>
+                  <p style={{ color:C.gold, fontSize:14 }}>- {ACTOR_QUOTES[quoteIdx].author}</p>
                   <Heart active={favQuotes.includes(ACTOR_QUOTES[quoteIdx].id)} onToggle={()=>toggleFavQuote(ACTOR_QUOTES[quoteIdx].id)} size={20} />
                 </div>
                 <div style={{ display:"flex", gap:12, marginTop:20 }}>
@@ -1258,7 +1258,7 @@ export default function ActorSanctuary() {
                     onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background=C.card; }}>
                     <div onClick={()=>setQuoteIdx(ACTOR_QUOTES.indexOf(q))}>
                       <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:14, fontStyle:"italic", color:C.text, lineHeight:1.6, marginBottom:8 }}>"{q.text}"</p>
-                      <p style={{ color:C.muted, fontSize:12, marginBottom:8 }}>— {q.author}</p>
+                      <p style={{ color:C.muted, fontSize:12, marginBottom:8 }}>- {q.author}</p>
                     </div>
                     <Heart active={favQuotes.includes(q.id)} onToggle={()=>toggleFavQuote(q.id)} />
                   </div>
@@ -1284,7 +1284,7 @@ export default function ActorSanctuary() {
                 </div>
               </div>
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:"16px 20px" }}>
-                <p style={{ color:C.muted, fontSize:13, lineHeight:1.8 }}>Elia Kazan (1909–2003) was one of the most influential directors in American theatre and film — responsible for some of the great performances of the 20th century. He wrote The Actor's Vow as a declaration of what it truly means to show up as yourself on stage.</p>
+                <p style={{ color:C.muted, fontSize:13, lineHeight:1.8 }}>Elia Kazan (1909-2003) was one of the most influential directors in American theatre and film - responsible for some of the great performances of the 20th century. He wrote The Actor's Vow as a declaration of what it truly means to show up as yourself on stage.</p>
               </div>
             </div>
           )}
@@ -1303,7 +1303,7 @@ export default function ActorSanctuary() {
             <div className="fu" style={{ display:"flex", flexDirection:"column", gap:16 }}>
               <div><Heading>The Green Room</Heading><p style={{ color:C.muted, fontSize:14 }}>You are not alone in this work.</p></div>
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:18 }}>
-                <textarea placeholder="Share something — a win, a worry, a wisdom..." style={{ width:"100%", background:"transparent", border:"none", color:C.text, fontSize:15, fontFamily:"'Lato',sans-serif", resize:"none", outline:"none", lineHeight:1.7, minHeight:70 }} />
+                <textarea placeholder="Share something - a win, a worry, a wisdom..." style={{ width:"100%", background:"transparent", border:"none", color:C.text, fontSize:15, fontFamily:"'Lato',sans-serif", resize:"none", outline:"none", lineHeight:1.7, minHeight:70 }} />
                 <div style={{ display:"flex", justifyContent:"flex-end" }}>
                   <button style={{ padding:"8px 20px", borderRadius:40, background:C.sage, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:13 }}>Share</button>
                 </div>
