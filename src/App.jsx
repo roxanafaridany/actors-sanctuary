@@ -16,17 +16,17 @@ const NAV = [
   { id:"journal",  label:"Journal",     icon:"✐" },
   { id:"quotes",   label:"Quotes",      icon:"❝" },
   { id:"vow",      label:"The Vow",     icon:"◈" },
+  { id:"auditions", label:"Audition Log",  icon:"◐" },
   { id:"circle",   label:"The Circle",  icon:"○" },
   { id:"resting",  label:"The Rest",    icon:"◑" },
-  { id:"community",label:"The Green Room", icon:"♡" },
 ];
 
 const BOTTOM_NAV = [
-  { id:"home",      label:"Home",    icon:"✦" },
-  { id:"mylibrary", label:"Library", icon:"☆" },
-  { id:"circle",    label:"Circle",  icon:"○" },
-  { id:"journal",   label:"Journal", icon:"✐" },
-  { id:"more",      label:"More",    icon:"⋯" },
+  { id:"home",      label:"Home",      icon:"✦" },
+  { id:"auditions", label:"Auditions", icon:"◐" },
+  { id:"circle",    label:"Circle",    icon:"○" },
+  { id:"journal",   label:"Journal",   icon:"✐" },
+  { id:"more",      label:"More",      icon:"⋯" },
 ];
 
 const PRACTITIONERS = [
@@ -119,11 +119,7 @@ const OCD_TOOLS = [
     note:"Presence is the antidote. The thought cannot follow you into a moment of genuine contact." },
 ];
 
-const COMMUNITY_POSTS = [
-  { name:"Priya M.", avatar:"PM", color:C.rose, time:"2 hours ago", hearts:24, text:"Used the 4-7-8 breath before my callback today. I felt so present. Didn't book it but I felt proud of how I showed up. 🌿" },
-  { name:"Tom R.",   avatar:"TR", color:C.sage, time:"Yesterday",    hearts:41, text:"Dr. Osei's video on releasing outcome attachment literally changed how I walk into a room. Highly recommend." },
-  { name:"Cass B.",  avatar:"CB", color:C.lavender, time:"3 days ago", hearts:57, text:"Built my first ritual using the builder. 5 mins of grounding, 3 mins of breath, one affirmation. Simple but it's mine. Felt like armour." },
-];
+const COMMUNITY_POSTS = [];
 
 const GOOD_LUCK_MESSAGES = [
   "You've prepared for this. The room is lucky to have you in it. Go show them what you've got. ★",
@@ -462,6 +458,266 @@ const RESTING_RITUALS = [
   { icon:"❝", color:C.gold,     title:"Consume Hungrily",   desc:"Watch. Read. Go to the theatre. You are still a student of the craft. Let other people's work nourish yours." },
   { icon:"〜", color:C.rose,    title:"Name What You Feel", desc:"Say it out loud or write it down: 'I am finding this hard.' The silence of a resting period gets heavier when it's unnamed." },
 ];
+
+// ─── Audition Log ─────────────────────────────────────────────────────────
+const CHECKLIST_ITEMS = [
+  { id:"ritual",   label:"Did my ritual" },
+  { id:"lines",    label:"Knew my lines" },
+  { id:"research", label:"Researched the project" },
+  { id:"early",    label:"Arrived early" },
+  { id:"breath",   label:"Did my breathwork" },
+  { id:"clothes",  label:"Felt good in what I wore" },
+];
+
+const FEELING_OPTIONS = ["Nervous", "Excited", "Calm", "Flat", "Confident", "Overwhelmed", "Present", "Distracted"];
+
+function AuditionLog() {
+  const [auditions, setAuditions] = useStorage("audition_log", []);
+  const [view, setView] = useState("list"); // list | new | detail | checklist
+  const [selectedId, setSelectedId] = useState(null);
+  const [checklist, setChecklist] = useStorage("audition_checklist", []);
+  const [form, setForm] = useState({
+    role:"", production:"", castingDirector:"", date:"",
+    feelings:[], whatWorked:"", whatDidnt:"", dodifferently:"",
+    presence:3, wantJob:"maybe", notes:""
+  });
+
+  const saveAudition = () => {
+    if (!form.role.trim()) return;
+    setAuditions(a => [{ id:Date.now(), ...form, date: form.date || new Date().toISOString().split("T")[0] }, ...a]);
+    setForm({ role:"", production:"", castingDirector:"", date:"", feelings:[], whatWorked:"", whatDidnt:"", doDirectory:"", presence:3, wantJob:"maybe", notes:"" });
+    setView("list");
+  };
+
+  const toggleFeeling = f => setForm(prev => ({ ...prev, feelings: prev.feelings.includes(f) ? prev.feelings.filter(x=>x!==f) : [...prev.feelings, f] }));
+  const toggleCheck = id => setChecklist(c => c.includes(id) ? c.filter(x=>x!==id) : [...c, id]);
+
+  const selected = auditions.find(a=>a.id===selectedId);
+
+  // ── Checklist view ──
+  if (view==="checklist") {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+        <button onClick={()=>setView("list")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left" }}>← Back</button>
+        <div>
+          <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Pre-Audition Checklist</h2>
+          <p style={{ color:C.muted, fontSize:14 }}>Tick these off before you walk in.</p>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {CHECKLIST_ITEMS.map(item => {
+            const done = checklist.includes(item.id);
+            return (
+              <button key={item.id} onClick={()=>toggleCheck(item.id)} style={{ display:"flex", alignItems:"center", gap:16, padding:"16px 18px", borderRadius:14, border:`1px solid ${done?C.sage:C.border}`, background:done?`${C.sage}12`:C.card, cursor:"pointer", textAlign:"left", transition:"all 0.25s", width:"100%" }}>
+                <div style={{ width:26, height:26, borderRadius:"50%", border:`2px solid ${done?C.sage:C.border}`, background:done?C.sage:"transparent", display:"flex", alignItems:"center", justifyContent:"center", color:C.bg, fontSize:13, flexShrink:0, transition:"all 0.25s" }}>{done?"✓":""}</div>
+                <p style={{ fontSize:15, color:done?C.text:C.muted, fontWeight:done?600:400 }}>{item.label}</p>
+              </button>
+            );
+          })}
+        </div>
+        {checklist.length === CHECKLIST_ITEMS.length && (
+          <div style={{ background:`${C.gold}12`, border:`1px solid ${C.gold}44`, borderRadius:14, padding:"18px 20px", textAlign:"center" }}>
+            <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.goldLight }}>You are ready. Go into that room. ✦</p>
+          </div>
+        )}
+        <button onClick={()=>setChecklist([])} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:30, padding:"10px", color:C.muted, cursor:"pointer", fontSize:13 }}>Reset checklist</button>
+      </div>
+    );
+  }
+
+  // ── Detail view ──
+  if (view==="detail" && selected) {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+        <button onClick={()=>setView("list")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left" }}>← All auditions</button>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:18, padding:"24px" }}>
+          <p style={{ color:C.gold, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>{new Date(selected.date).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}</p>
+          <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:26, marginBottom:4 }}>{selected.role}</h2>
+          {selected.production && <p style={{ color:C.muted, fontSize:14, marginBottom:4 }}>{selected.production}</p>}
+          {selected.castingDirector && <p style={{ color:C.muted, fontSize:13, fontStyle:"italic" }}>with {selected.castingDirector}</p>}
+        </div>
+
+        {selected.feelings?.length > 0 && (
+          <div>
+            <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>How I felt</p>
+            <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+              {selected.feelings.map(f => <span key={f} style={{ padding:"5px 14px", borderRadius:20, background:`${C.lavender}22`, border:`1px solid ${C.lavender}55`, color:C.lavender, fontSize:13 }}>{f}</span>)}
+            </div>
+          </div>
+        )}
+
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <p style={{ color:C.muted, fontSize:13 }}>Presence</p>
+          <div style={{ display:"flex", gap:6 }}>
+            {[1,2,3,4,5].map(n => <div key={n} style={{ width:28, height:28, borderRadius:"50%", background:n<=selected.presence?C.gold:`${C.gold}22`, border:`1px solid ${C.gold}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:n<=selected.presence?C.bg:C.muted }}>{n}</div>)}
+          </div>
+          <span style={{ padding:"4px 12px", borderRadius:20, background:selected.wantJob==="yes"?`${C.sage}22`:selected.wantJob==="no"?`${C.rose}22`:`${C.gold}22`, border:`1px solid ${selected.wantJob==="yes"?C.sage:selected.wantJob==="no"?C.rose:C.gold}55`, color:selected.wantJob==="yes"?C.sage:selected.wantJob==="no"?C.rose:C.gold, fontSize:12, marginLeft:"auto" }}>
+            {selected.wantJob==="yes"?"Want this job":selected.wantJob==="no"?"Don't want it":"Maybe"}
+          </span>
+        </div>
+
+        {[{label:"What worked", val:selected.whatWorked, col:C.sage},{label:"What didn't", val:selected.whatDidnt, col:C.rose},{label:"Do differently", val:selected.doDifferently, col:C.lavender},{label:"Notes", val:selected.notes, col:C.muted}].map(({label,val,col}) => val ? (
+          <div key={label}>
+            <p style={{ color:col, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>{label}</p>
+            <p style={{ color:C.text, fontSize:14, lineHeight:1.7, background:C.card, border:`1px solid ${C.border}`, borderRadius:12, padding:"14px 16px" }}>{val}</p>
+          </div>
+        ) : null)}
+
+        <button onClick={()=>{ setAuditions(a=>a.filter(x=>x.id!==selected.id)); setView("list"); }} style={{ background:"none", border:`1px solid ${C.rose}44`, borderRadius:30, padding:"10px", color:C.rose, cursor:"pointer", fontSize:13 }}>Delete this entry</button>
+      </div>
+    );
+  }
+
+  // ── New audition form ──
+  if (view==="new") {
+    return (
+      <div className="fu" style={{ display:"flex", flexDirection:"column", gap:18 }}>
+        <button onClick={()=>setView("list")} style={{ background:"none", border:"none", color:C.muted, cursor:"pointer", fontSize:14, textAlign:"left" }}>← Cancel</button>
+        <div>
+          <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Log an Audition</h2>
+          <p style={{ color:C.muted, fontSize:14 }}>Every room teaches you something.</p>
+        </div>
+
+        {/* Basic info */}
+        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+          {[
+            { key:"role", label:"Role", placeholder:"e.g. Hamlet, Lady in Red, Lead" },
+            { key:"production", label:"Production / Company", placeholder:"e.g. National Theatre, BBC Drama" },
+            { key:"castingDirector", label:"Casting Director / Who was in the room", placeholder:"e.g. Sarah Crowe CDG" },
+          ].map(({key,label,placeholder}) => (
+            <div key={key}>
+              <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>{label}</p>
+              <input value={form[key]} onChange={e=>setForm(f=>({...f,[key]:e.target.value}))} placeholder={placeholder} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:14, outline:"none", width:"100%", boxSizing:"border-box" }} />
+            </div>
+          ))}
+          <div>
+            <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>Date</p>
+            <input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"12px 16px", color:C.text, fontSize:14, outline:"none", width:"100%", boxSizing:"border-box", colorScheme:"dark" }} />
+          </div>
+        </div>
+
+        {/* Feelings */}
+        <div>
+          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>How did you feel? (pick all that apply)</p>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+            {FEELING_OPTIONS.map(f => {
+              const on = form.feelings.includes(f);
+              return <button key={f} onClick={()=>toggleFeeling(f)} style={{ padding:"7px 16px", borderRadius:20, border:`1px solid ${on?C.lavender:C.border}`, background:on?`${C.lavender}22`:"transparent", color:on?C.lavender:C.muted, cursor:"pointer", fontSize:13, transition:"all 0.2s" }}>{f}</button>;
+            })}
+          </div>
+        </div>
+
+        {/* Presence rating */}
+        <div>
+          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>How present did you feel? (1–5)</p>
+          <div style={{ display:"flex", gap:10 }}>
+            {[1,2,3,4,5].map(n => (
+              <button key={n} onClick={()=>setForm(f=>({...f,presence:n}))} style={{ width:44, height:44, borderRadius:"50%", border:`2px solid ${n<=form.presence?C.gold:C.border}`, background:n<=form.presence?`${C.gold}22`:"transparent", color:n<=form.presence?C.gold:C.muted, cursor:"pointer", fontSize:15, fontWeight:600, transition:"all 0.2s" }}>{n}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* Want the job */}
+        <div>
+          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>Would you want this job?</p>
+          <div style={{ display:"flex", gap:10 }}>
+            {[{v:"yes",label:"Yes!",col:C.sage},{v:"maybe",label:"Maybe",col:C.gold},{v:"no",label:"Not really",col:C.rose}].map(({v,label,col}) => (
+              <button key={v} onClick={()=>setForm(f=>({...f,wantJob:v}))} style={{ flex:1, padding:"10px", borderRadius:30, border:`1px solid ${form.wantJob===v?col:C.border}`, background:form.wantJob===v?`${col}22`:"transparent", color:form.wantJob===v?col:C.muted, cursor:"pointer", fontSize:13, fontWeight:form.wantJob===v?600:400, transition:"all 0.2s" }}>{label}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* Reflection */}
+        {[
+          { key:"whatWorked", label:"What worked", placeholder:"What felt good in the room..." },
+          { key:"whatDidnt", label:"What didn't work", placeholder:"What felt off or uncomfortable..." },
+          { key:"doDifferently", label:"What I'd do differently", placeholder:"If I walked back in tomorrow..." },
+          { key:"notes", label:"Any other notes", placeholder:"Who I met, what they said, how the room felt..." },
+        ].map(({key,label,placeholder}) => (
+          <div key={key}>
+            <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>{label}</p>
+            <textarea value={form[key]} onChange={e=>setForm(f=>({...f,[key]:e.target.value}))} placeholder={placeholder} style={{ width:"100%", minHeight:90, background:C.card, border:`1px solid ${C.border}`, borderRadius:10, color:C.text, padding:"12px 14px", fontSize:14, lineHeight:1.7, resize:"vertical", fontFamily:"'Lato',sans-serif", outline:"none", boxSizing:"border-box" }} />
+          </div>
+        ))}
+
+        <button onClick={saveAudition} style={{ padding:"14px", borderRadius:40, background:C.gold, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:15 }}>Save Audition Log</button>
+      </div>
+    );
+  }
+
+  // ── List view ──
+  return (
+    <div className="fu" style={{ display:"flex", flexDirection:"column", gap:20 }}>
+      <div>
+        <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Audition Log</h2>
+        <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Track every room. Learn from every experience. The pattern will emerge.</p>
+      </div>
+
+      {/* Quick actions */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
+        <button onClick={()=>setView("checklist")} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:"18px 16px", cursor:"pointer", textAlign:"left", transition:"all 0.2s" }}
+          onMouseEnter={e=>{ e.currentTarget.style.borderColor=C.sage; }}
+          onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; }}>
+          <span style={{ fontSize:20, color:C.sage, display:"block", marginBottom:8 }}>✓</span>
+          <p style={{ fontWeight:600, fontSize:14, color:C.text, marginBottom:3 }}>Pre-Audition Checklist</p>
+          <p style={{ color:C.muted, fontSize:12 }}>{checklist.length}/{CHECKLIST_ITEMS.length} done</p>
+        </button>
+        <button onClick={()=>setView("new")} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:"18px 16px", cursor:"pointer", textAlign:"left", transition:"all 0.2s" }}
+          onMouseEnter={e=>{ e.currentTarget.style.borderColor=C.gold; }}
+          onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; }}>
+          <span style={{ fontSize:20, color:C.gold, display:"block", marginBottom:8 }}>◐</span>
+          <p style={{ fontWeight:600, fontSize:14, color:C.text, marginBottom:3 }}>Log an Audition</p>
+          <p style={{ color:C.muted, fontSize:12 }}>After the room</p>
+        </button>
+      </div>
+
+      {/* Stats */}
+      {auditions.length > 0 && (
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
+          {[
+            { label:"Total", value:auditions.length },
+            { label:"Want the job", value:auditions.filter(a=>a.wantJob==="yes").length },
+            { label:"Avg presence", value:(auditions.reduce((s,a)=>s+(a.presence||3),0)/auditions.length).toFixed(1) },
+          ].map(({label,value}) => (
+            <div key={label} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:12, padding:"14px", textAlign:"center" }}>
+              <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:24, color:C.gold, marginBottom:4 }}>{value}</p>
+              <p style={{ color:C.muted, fontSize:12 }}>{label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Audition list */}
+      {auditions.length === 0 ? (
+        <div style={{ textAlign:"center", padding:"40px 24px", border:`1px dashed ${C.border}`, borderRadius:18 }}>
+          <p style={{ fontSize:28, marginBottom:12 }}>◐</p>
+          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.muted, marginBottom:8 }}>No auditions logged yet.</p>
+          <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>After your next audition, come back and log how it went.</p>
+        </div>
+      ) : (
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase" }}>Your Auditions</p>
+          {auditions.map(aud => (
+            <button key={aud.id} onClick={()=>{ setSelectedId(aud.id); setView("detail"); }} style={{ display:"flex", alignItems:"center", gap:14, padding:"16px 18px", background:C.card, border:`1px solid ${C.border}`, borderRadius:14, cursor:"pointer", textAlign:"left", transition:"all 0.2s", width:"100%" }}
+              onMouseEnter={e=>{ e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.background=C.cardHover; }}
+              onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background=C.card; }}>
+              <div style={{ flex:1 }}>
+                <p style={{ fontWeight:600, fontSize:15, marginBottom:3 }}>{aud.role}</p>
+                <p style={{ fontSize:12, color:C.muted }}>{aud.production && `${aud.production} · `}{new Date(aud.date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}</p>
+                {aud.feelings?.length > 0 && <p style={{ fontSize:12, color:C.lavender, marginTop:4 }}>{aud.feelings.slice(0,3).join(", ")}</p>}
+              </div>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:6 }}>
+                <div style={{ display:"flex", gap:3 }}>
+                  {[1,2,3,4,5].map(n=><div key={n} style={{ width:6, height:6, borderRadius:"50%", background:n<=aud.presence?C.gold:`${C.gold}22` }} />)}
+                </div>
+                <span style={{ fontSize:11, color:aud.wantJob==="yes"?C.sage:aud.wantJob==="no"?C.rose:C.muted }}>{aud.wantJob==="yes"?"✓ Wanted it":aud.wantJob==="no"?"✗ Didn't want":"~ Maybe"}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function RestingTab() {
   const [affIdx, setAffIdx] = useState(0);
@@ -1015,7 +1271,7 @@ export default function ActorSanctuary() {
                 <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.text, lineHeight:1.6 }}>"{AFFIRMATIONS[affIdx]}"</p>
               </div>
               <div className="grid-3">
-                {[{ t:"breathe",icon:"〜",label:"Breathwork",desc:"Calm in 5 min",col:C.lavender },{ t:"circle",icon:"○",label:"The Circle",desc:"Send luck",col:C.gold },{ t:"resting",icon:"◑",label:"The Rest",desc:"For the in-between",col:C.lavender }].map(card=>(
+                {[{ t:"breathe",icon:"〜",label:"Breathwork",desc:"Calm in 5 min",col:C.lavender },{ t:"auditions",icon:"◐",label:"Audition Log",desc:"Track & reflect",col:C.gold },{ t:"resting",icon:"◑",label:"The Rest",desc:"For the in-between",col:C.lavender }].map(card=>(
                   <button key={card.t} onClick={()=>goTo(card.t)} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:"16px 14px", cursor:"pointer", textAlign:"left", transition:"all 0.2s", color:C.text }}
                     onMouseEnter={e=>{ e.currentTarget.style.borderColor=card.col; e.currentTarget.style.background=C.cardHover; }}
                     onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background=C.card; }}>
@@ -1190,6 +1446,9 @@ export default function ActorSanctuary() {
             </div>
           )}
 
+          {/* AUDITION LOG */}
+          {tab==="auditions" && <div className="fu"><AuditionLog /></div>}
+
           {/* THE CIRCLE */}
           {tab==="circle" && <div className="fu"><TheCircle /></div>}
 
@@ -1201,12 +1460,18 @@ export default function ActorSanctuary() {
             <div className="fu" style={{ display:"flex", flexDirection:"column", gap:16 }}>
               <div><Heading>The Green Room</Heading><p style={{ color:C.muted, fontSize:14 }}>You are not alone in this work.</p></div>
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:18 }}>
-                <p style={{ color:C.muted, fontSize:12, marginBottom:10, fontStyle:"italic" }}>Posts below are placeholders — real posts will come from your community once live.</p>
                 <textarea placeholder="Share something — a win, a worry, a wisdom..." style={{ width:"100%", background:"transparent", border:"none", color:C.text, fontSize:15, fontFamily:"'Lato',sans-serif", resize:"none", outline:"none", lineHeight:1.7, minHeight:70 }} />
                 <div style={{ display:"flex", justifyContent:"flex-end" }}>
                   <button style={{ padding:"8px 20px", borderRadius:40, background:C.sage, border:"none", color:C.bg, fontWeight:700, cursor:"pointer", fontSize:13 }}>Share</button>
                 </div>
               </div>
+              {COMMUNITY_POSTS.length === 0 && (
+                <div style={{ textAlign:"center", padding:"40px 24px", border:`1px dashed ${C.border}`, borderRadius:18 }}>
+                  <p style={{ fontSize:28, marginBottom:12 }}>♡</p>
+                  <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, fontStyle:"italic", color:C.muted, marginBottom:8 }}>The room is waiting.</p>
+                  <p style={{ color:C.muted, fontSize:14, lineHeight:1.7 }}>Be the first to share something. A win, a worry, a wisdom.</p>
+                </div>
+              )}
               {COMMUNITY_POSTS.map((post,i)=>(
                 <div key={i} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"18px 20px" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
