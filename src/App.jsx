@@ -28,7 +28,51 @@ const BOTTOM_NAV = [
   { id:"more",      label:"More",      icon:"⋯" },
 ];
 
-    setSendingTo(null);
+const GOOD_LUCK_MESSAGES = [
+  "You've prepared for this. The room is lucky to have you in it. Go show them what you've got. ★",
+  "Today is your day. Walk in like you belong there — because you do. We're cheering for you. ★",
+  "You are so ready for this. Trust your preparation, trust yourself. Break a leg. ★",
+  "The work is done. Now just be yourself — that's always been enough. Rooting for you. ★",
+  "Step into that room with your whole heart. You've got this. We love you. ★",
+];
+
+const AVATAR_COLORS = [C.sage, C.rose, C.lavender, C.teal, C.gold];
+
+// ─── Storage helpers ──────────────────────────────────────────────────────
+function useStorage(key, defaultVal) {
+  const [val, setVal] = useState(() => {
+    try { const s = localStorage.getItem(key); return s ? JSON.parse(s) : defaultVal; } catch { return defaultVal; }
+  });
+  const set = useCallback((v) => {
+    setVal(prev => {
+      const next = typeof v === "function" ? v(prev) : v;
+      try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, [key]);
+  return [val, set];
+}
+
+// ─── Heart Button ─────────────────────────────────────────────────────────
+function Heart({ active, onToggle, size=16 }) {
+  return (
+    <button onClick={e => { e.stopPropagation(); onToggle(); }} style={{ background:"none", border:"none", cursor:"pointer", color:active?C.rose:C.muted, fontSize:size, lineHeight:1, padding:4, flexShrink:0, transition:"color 0.2s" }}>
+      {active ? "♥" : "♡"}
+    </button>
+  );
+}
+
+// ─── The Circle ───────────────────────────────────────────────────────────
+function TheCircle() {
+  const [friends, setFriends] = useStorage("circle_friends", []);
+  const [view, setView] = useState("list");
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [newFriend, setNewFriend] = useState({ name:"", note:"" });
+  const [newAudition, setNewAudition] = useState({ role:"", date:"" });
+  const [sentFlash, setSentFlash] = useState({});
+  const [selectedMsg, setSelectedMsg] = useState(0);
+  const [customMsg, setCustomMsg] = useState("");
+  const [sendingTo, setSendingTo] = useState(null);
     setTimeout(() => setSentFlash(s => { const n={...s}; delete n[key]; return n; }), 3000);
   };
 
