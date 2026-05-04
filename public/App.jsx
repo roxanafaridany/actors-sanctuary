@@ -212,7 +212,7 @@ function TheCircle() {
             <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:22 }}>{friend.name}</p>
             {friend.note && <p style={{ color:C.muted, fontSize:13, marginTop:4, fontStyle:"italic" }}>{friend.note}</p>}
           </div>
-          <button onClick={()=>{ if(window.confirm(`Remove ${friend.name} from your circle?`)) { setFriends(f=>f.filter(fr=>fr.id!==friend.id)); setView("list"); }}} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:20, padding:"6px 14px", color:C.muted, cursor:"pointer", fontSize:12, flexShrink:0 }}>Remove</button>
+          <button onClick={()=>{ setFriends(f=>f.filter(fr=>fr.id!==friend.id)); setView("list"); }} style={{ background:"none", border:`1px solid ${C.rose}55`, borderRadius:20, padding:"6px 14px", color:C.rose, cursor:"pointer", fontSize:12, flexShrink:0 }}>Remove</button>
         </div>
 
         {/* Upcoming auditions */}
