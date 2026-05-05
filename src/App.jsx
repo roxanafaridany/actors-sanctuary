@@ -75,7 +75,7 @@ function TheCircle() {
   const [selectedMsg, setSelectedMsg] = useState(0);
   const [customMsg, setCustomMsg] = useState("");
   const [sendingTo, setSendingTo] = useState(null);
-    setTimeout(() => setSentFlash(s => { const n={...s}; delete n[key]; return n; }), 3000);
+
   };
 
   const friend = friends.find(f=>f.id===selectedFriend);
