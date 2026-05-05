@@ -29,6 +29,74 @@ const BOTTOM_NAV = [
   { id:"journal",   label:"Journal",   icon:"✐" },
   { id:"more",      label:"More",      icon:"⋯" },
 ];
+const AFFIRMATIONS = [
+  "I bring something no one else can.",
+  "This room is lucky to have me in it.",
+  "My preparation has brought me here.",
+  "I am not auditioning for approval - I am sharing my art.",
+  "Nerves are proof that I care. They are my allies.",
+  "I release the need to control the outcome.",
+  "My presence is enough.",
+  "I have done hard things before. I am doing one now.",
+];
+
+const ACTOR_QUOTES = [
+  { id:"q1", text:"An actor is at his best a kind of unfrocked priest who, for an hour or two, can call on heaven and hell to mesmerise a group of innocents.", author:"Alec Guinness" },
+  { id:"q2", text:"Acting is not about being someone different. It's finding the similarity in what is apparently different, then finding myself in there.", author:"Meryl Streep" },
+  { id:"q3", text:"You have to be willing to look stupid. The fear of looking stupid is what makes you look stupid.", author:"Stella Adler" },
+  { id:"q4", text:"Your emotional life is not cut off when you walk into an audition room. It is the very thing they want to see.", author:"Sanford Meisner" },
+  { id:"q5", text:"The craft is in the listening. Be changed by what your scene partner gives you.", author:"Sanford Meisner" },
+  { id:"q6", text:"Don't act. Be. The camera picks up everything - especially the lie.", author:"Michael Caine" },
+  { id:"q7", text:"There is no failure in rehearsal. There is only discovery.", author:"Peter Brook" },
+  { id:"q8", text:"Your vulnerability is your power. The audience comes to be moved, not impressed.", author:"Uta Hagen" },
+  { id:"q9", text:"Acting is the ability to live truthfully under imaginary circumstances.", author:"Sanford Meisner" },
+  { id:"q10", text:"A great actor is someone who can do nothing - and hold the room.", author:"Lee Strasberg" },
+  { id:"q11", text:"The best performances come from actors who are not afraid of silence.", author:"Sidney Lumet" },
+  { id:"q12", text:"The preparation, the work, the discipline - it's what you bring to the room, not what you take away.", author:"Viola Davis" },
+];
+
+const KAZAN_VOW = [
+  "I will take my rightful place on the stage and I will be myself.",
+  "I am not a cosmic orphan.",
+  "I have no reason to be timid.",
+  "I will respond as I feel; awkwardly, vulgarly, but respond.",
+  "I will have my throat open, I will have my heart open, I will be vulnerable.",
+  "I may have anything or everything the world has to offer, but the thing I need most, and want most, is to be myself.",
+  "I will admit rejection, admit pain, admit frustration, admit even pettiness, admit shame, admit outrage, admit anything and everything that happens to me.",
+  "The best and most human parts of me are those that I have inhabited and hidden from the world.",
+  "I will work on it.",
+  "I will raise my voice.",
+  "I will be heard.",
+];
+
+const RITUAL_STEPS = [
+  { id:"ground",  label:"Ground",  icon:"⬡", desc:"Connect to your body",         color:"#7a9e8a" },
+  { id:"breathe", label:"Breathe", icon:"〜", desc:"Regulate your nervous system", color:"#9a8ec0" },
+  { id:"affirm",  label:"Affirm",  icon:"✦", desc:"Set your intention",            color:"#c8923a" },
+  { id:"release", label:"Release", icon:"◌", desc:"Let go of outcome",             color:"#c47a7a" },
+  { id:"arrive",  label:"Arrive",  icon:"◎", desc:"Step into your character",      color:"#5a9e9a" },
+];
+
+const OCD_TOOLS = [
+  { id:"notice", icon:"◎", color:"#9a8ec0", title:"Notice & Name", subtitle:"Defusion",
+    body:"When an intrusive thought arrives, you don't have to fight it or obey it. Simply name what's happening:",
+    steps:[`"I notice I'm having the thought that ___"`,`"There's a part of me that is frightened right now"`,`"This is OCD speaking. It is not the truth."`],
+    note:"Naming creates distance. You are the noticer - not the thought." },
+  { id:"parts", icon:"⬡", color:"#c8923a", title:"Meet the Part", subtitle:"IFS",
+    body:"OCD often shows up as a protective Part - anxious, urgent, trying to keep you safe. Instead of fighting it:",
+    steps:[`Get curious: "What are you afraid will happen if I don't listen to you?"`,`Offer compassion: "I see you. Thank you for trying to protect me."`,`Gently redirect: "I'm going to take care of us another way right now."`],
+    note:"Parts that feel heard tend to quiet down. You are the Self - larger than any one Part." },
+  { id:"body", icon:"〜", color:"#7a9e8a", title:"Return to the Body", subtitle:"Somatic grounding",
+    body:"Rumination lives in the mind. The body is always in the present moment. Use it as your anchor:",
+    steps:["Press both feet firmly into the floor. Feel the weight.","Name 5 things you can see in this room - slowly, with detail.","Place one hand on your chest. Breathe in for 4, out for 6."],
+    note:"You cannot be fully in your body and fully in a spiral at the same time." },
+  { id:"room", icon:"✦", color:"#c47a7a", title:"Bring It Into the Room", subtitle:"The actor's superpower",
+    body:"You don't have to resolve the thought before you walk in. The audition room itself is an anchor:",
+    steps:["Notice the temperature of the air.","Make real eye contact with the reader or panel.","Let your scene partner's words actually land on you."],
+    note:"Presence is the antidote. The thought cannot follow you into a moment of genuine contact." },
+];
+
+const COMMUNITY_POSTS = [];
 
 const GOOD_LUCK_MESSAGES = [
   "You've prepared for this. The room is lucky to have you in it. Go show them what you've got. ★",
