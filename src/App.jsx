@@ -1265,7 +1265,7 @@ export default function ActorSanctuary() {
 
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:18, overflow:"hidden" }}>
                 <div style={{ display:"flex", alignItems:"center", gap:16, padding:"20px 20px 16px" }}>
-                  <img src="https://drive.google.com/uc?export=view&id=1TFoYs0vKsUVdQFU6gqqlE7cdHlj4GVxK" alt="Golnaz Maleki" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.sage}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
+                  <img src="https://res.cloudinary.com/dfa9vzxnf/image/upload/v1778002834/Screenshot_2026-05-05_at_18.40.03_xd5h6f.png" alt="Golnaz Maleki" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.sage}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
                   <div>
                     <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, marginBottom:2 }}>Golnaz Maleki</p>
                     <p style={{ color:C.sage, fontSize:13 }}>Yoga Teacher & Women's Coach</p>
@@ -1277,7 +1277,7 @@ export default function ActorSanctuary() {
                   <div style={{ background:C.bg, borderRadius:12, padding:"14px 16px" }}>
                     <p style={{ fontWeight:600, fontSize:14, color:C.text, marginBottom:10 }}>Breath Awareness & Body Scan</p>
                     <audio controls style={{ width:"100%", accentColor:C.sage }}>
-                      <source src="https://drive.google.com/uc?export=download&id=1kxNTJtXH5WiiGEUMDXH0LazwnPnYYCh-" type="audio/mpeg" />
+                      <source src="https://res.cloudinary.com/dfa9vzxnf/video/upload/v1778002936/AUDIO-2026-05-04-20-01-05_dbykyj.mp4" type="audio/mpeg" />
                     </audio>
                   </div>
                 </div>
@@ -1285,7 +1285,7 @@ export default function ActorSanctuary() {
 
               <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:18, overflow:"hidden" }}>
                 <div style={{ display:"flex", alignItems:"center", gap:16, padding:"20px 20px 16px" }}>
-                  <img src="https://drive.google.com/uc?export=view&id=1OBlYLS9Zr32HReVfxyZHnKtTxOy2CVgi" alt="Laura Fowler-Watt" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.lavender}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
+                  <img src="https://res.cloudinary.com/dfa9vzxnf/image/upload/v1778002837/Screenshot_2026-05-05_at_18.40.13_d5muqn.png" alt="Laura Fowler-Watt" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.lavender}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
                   <div>
                     <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, marginBottom:2 }}>Laura Fowler-Watt</p>
                     <p style={{ color:C.lavender, fontSize:13 }}>Trauma & Nervous System Coach</p>
