@@ -76,8 +76,6 @@ function TheCircle() {
   const [customMsg, setCustomMsg] = useState("");
   const [sendingTo, setSendingTo] = useState(null);
 
-  };
-
   const friend = friends.find(f=>f.id===selectedFriend);
   const msgToSend = customMsg.trim() || GOOD_LUCK_MESSAGES[selectedMsg];
 
