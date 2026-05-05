@@ -1018,9 +1018,6 @@ function MyLibrary({ goTo }) {
         </Section>
       )}
 
-              </Section>
-      )}
-
       {entries.length > 0 && (
         <Section title="Journal Entries" icon="✐" color={C.teal} tab="journal">
           {entries.slice(0,3).map((e,i) => (
