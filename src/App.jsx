@@ -11,6 +11,7 @@ const NAV = [
   { id:"home",      label:"Sanctuary",   icon:"✦" },
   { id:"mylibrary", label:"My Library",  icon:"☆" },
   { id:"ritual",   label:"Ritual",      icon:"◎" },
+  { id:"library",  label:"Library",     icon:"▷" },
   { id:"breathe",  label:"Breathe",     icon:"〜" },
   { id:"ocd",      label:"OCD",         icon:"⬡" },
   { id:"journal",  label:"Journal",     icon:"✐" },
@@ -1167,7 +1168,58 @@ export default function ActorSanctuary() {
           {/* RITUAL */}
           {tab==="ritual" && <RitualBuilder ritualSteps={ritualSteps} setRitualSteps={setRitualSteps} savedRitual={savedRitual} setSavedRitual={setSavedRitual} />}
 
-          
+          {/* LIBRARY */}
+          {tab==="library" && (
+            <div className="fu" style={{ display:"flex", flexDirection:"column", gap:24 }}>
+              <div>
+                <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:28, fontWeight:400, marginBottom:6 }}>Practitioner Library</h2>
+                <p style={{ color:C.muted, fontSize:14 }}>Guidance from people who truly understand the work.</p>
+              </div>
+
+              <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:18, overflow:"hidden" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:16, padding:"20px 20px 16px" }}>
+                  <img src="https://drive.google.com/uc?export=view&id=1TFoYs0vKsUVdQFU6gqqlE7cdHlj4GVxK" alt="Golnaz Maleki" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.sage}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
+                  <div>
+                    <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, marginBottom:2 }}>Golnaz Maleki</p>
+                    <p style={{ color:C.sage, fontSize:13 }}>Yoga Teacher & Women's Coach</p>
+                  </div>
+                </div>
+                <p style={{ color:C.muted, fontSize:13, lineHeight:1.7, padding:"0 20px 16px" }}>Since completing her teacher training in 2008, Golnaz has evolved into a 500+ hour qualified teacher. She strongly believes that to be an effective teacher she must remain a student. Her specialities include yoga to reduce stress and aid in the symptoms of menopause.</p>
+                <div style={{ borderTop:`1px solid ${C.border}`, padding:"16px 20px" }}>
+                  <p style={{ color:C.muted, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:12 }}>Listen</p>
+                  <div style={{ background:C.bg, borderRadius:12, padding:"14px 16px" }}>
+                    <p style={{ fontWeight:600, fontSize:14, color:C.text, marginBottom:10 }}>Breath Awareness & Body Scan</p>
+                    <audio controls style={{ width:"100%", accentColor:C.sage }}>
+                      <source src="https://drive.google.com/uc?export=download&id=1kxNTJtXH5WiiGEUMDXH0LazwnPnYYCh-" type="audio/mpeg" />
+                    </audio>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:18, overflow:"hidden" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:16, padding:"20px 20px 16px" }}>
+                  <img src="https://drive.google.com/uc?export=view&id=1OBlYLS9Zr32HReVfxyZHnKtTxOy2CVgi" alt="Laura Fowler-Watt" style={{ width:64, height:64, borderRadius:"50%", objectFit:"cover", border:`2px solid ${C.lavender}`, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
+                  <div>
+                    <p style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, marginBottom:2 }}>Laura Fowler-Watt</p>
+                    <p style={{ color:C.lavender, fontSize:13 }}>Trauma & Nervous System Coach</p>
+                  </div>
+                </div>
+                <p style={{ color:C.muted, fontSize:13, lineHeight:1.7, padding:"0 20px 16px" }}>Laura is a trauma and nervous system coach who works with people to understand and regulate their bodies stress responses. Her approach is rooted in compassion, safety and the belief that healing begins in the body.</p>
+                <div style={{ borderTop:`1px solid ${C.border}`, padding:"16px 20px" }}>
+                  <a href="https://www.instagram.com/lfwcoaching/" target="_blank" rel="noopener noreferrer" style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 16px", borderRadius:12, border:`1px solid ${C.lavender}44`, background:`${C.lavender}11`, textDecoration:"none" }}>
+                    <span style={{ fontSize:18, color:C.lavender }}>◈</span>
+                    <div>
+                      <p style={{ color:C.lavender, fontWeight:600, fontSize:14 }}>@lfwcoaching</p>
+                      <p style={{ color:C.muted, fontSize:12 }}>Follow on Instagram</p>
+                    </div>
+                    <span style={{ marginLeft:"auto", color:C.muted }}>→</span>
+                  </a>
+                </div>
+              </div>
+
+              <p style={{ color:C.muted, fontSize:12, textAlign:"center", fontStyle:"italic" }}>More practitioners coming soon. ✦</p>
+            </div>
+          )}
 
           {/* BREATHWORK */}
           {tab==="breathe" && (
