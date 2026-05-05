@@ -143,7 +143,31 @@ function TheCircle() {
   const [selectedMsg, setSelectedMsg] = useState(0);
   const [customMsg, setCustomMsg] = useState("");
   const [sendingTo, setSendingTo] = useState(null);
+const today = new Date();
+  const daysUntil = d => Math.round((new Date(d) - today) / 86400000);
 
+  const addFriend = () => {
+    if (!newFriend.name.trim()) return;
+    const initials = newFriend.name.trim().split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+    setFriends(f => [...f, { id:Date.now(), name:newFriend.name.trim(), initials, note:newFriend.note.trim(), color:AVATAR_COLORS[f.length%AVATAR_COLORS.length], auditions:[] }]);
+    setNewFriend({ name:"", note:"" }); setView("list");
+  };
+
+  const addAudition = (friendId) => {
+    if (!newAudition.role.trim() || !newAudition.date) return;
+    setFriends(f => f.map(fr => fr.id===friendId ? { ...fr, auditions:[...fr.auditions, { role:newAudition.role.trim(), date:newAudition.date, sent:false }] } : fr));
+    setNewAudition({ role:"", date:"" });
+    setView("friend");
+  };
+
+  const sendLuck = (friendId, audIdx) => {
+    const key = `${friendId}-${audIdx}`;
+    setFriends(f => f.map(fr => fr.id===friendId ? { ...fr, auditions:fr.auditions.map((a,i) => i===audIdx?{...a,sent:true}:a) } : fr));
+    setSentFlash(s => ({ ...s, [key]:true }));
+    setSendingTo(null);
+    setTimeout(() => setSentFlash(s => { const n={...s}; delete n[key]; return n; }), 3000);
+  };  
+  
   const friend = friends.find(f=>f.id===selectedFriend);
   const msgToSend = customMsg.trim() || GOOD_LUCK_MESSAGES[selectedMsg];
 
