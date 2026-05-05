@@ -11,9 +11,10 @@ const NAV = [
   { id:"home",      label:"Sanctuary",   icon:"✦" },
   { id:"mylibrary", label:"My Library",  icon:"☆" },
   { id:"ritual",   label:"Ritual",      icon:"◎" },
-  { id:"library",  label:"Library",     icon:"▷" },
+ 
   { id:"breathe",  label:"Breathe",     icon:"〜" },
   { id:"ocd",      label:"OCD",         icon:"⬡" },
+  { id:"library",  label:"Library",     icon:"▷" },
   { id:"journal",  label:"Journal",     icon:"✐" },
   { id:"quotes",   label:"Quotes",      icon:"❝" },
   { id:"vow",      label:"The Vow",     icon:"◈" },
